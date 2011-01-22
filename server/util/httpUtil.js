@@ -43,7 +43,11 @@ exports.getSystemPathFromRequest = function(obj){
   }
   //set the full path from the system root
   //        util root/..up/..up/client folder/requested file path
-  return __dirname + '/../../' + clientFolderPath + path;
+  var path = __dirname + '/../../' + clientFolderPath + path;
+
+  //replace shared includes with the shared directory
+  var path = path.replace('shared/', '../shared/');
+  return path;
 }
 
 /*sends a file over http

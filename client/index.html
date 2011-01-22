@@ -9,11 +9,13 @@
 		<script src="/js/json.js"></script> <!-- for ie -->
 		<script src="/socket.io/socket.io.js"></script>
 	
-		<script type="text/javascript">
-			$(function() { //on DOM ready
-        var socket = new io.Socket(null, {port: 8080, rememberTransport: false});
-        socket.connect();
-      });
+    <script src="/shared/example.js"></script>
+  
+    <script type="text/javascript">
+			$(function() { //on DOM ready 
+        var shared = new ExampleSharedClass;
+        console.log(shared.publicMethod());
+        console.log(shared.publicAttribute);
 		</script>
 	</head>
 	<body>
