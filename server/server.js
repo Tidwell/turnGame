@@ -1,5 +1,5 @@
 /*
-This creates the basic http and socket servers
+Creates the basic http and socket servers
 and defines generic classes to handle those requests
 
 http requests are routed through util/httpHelper.js
@@ -9,7 +9,6 @@ socket requests are routed through classes/socketHandler.js
 
 //add our require paths to the require array
 require.paths.unshift('util/');
-require.paths.unshift('classes/'); //application log resides
 
 //assignments/loading
 var 
