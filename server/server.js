@@ -1,9 +1,9 @@
 /*
 Creates the basic http and socket servers
-and defines generic classes to handle those requests
+Uses util classes to handle those requests
 
-http requests are routed through util/httpHelper.js
-socket requests are routed through classes/socketUtil.js
+http requests are routed through util/httpUtil.js
+socket requests are routed through util/socketUtil.js
 */
 
 
@@ -41,7 +41,7 @@ var server = http.createServer(function(req, res){
   fs.readFile(systemPath, function(err, data){
     //if the file cannot be found
     if (err) {
-      //send the client a 404 response, done with http
+      //send the client a 404 response
       httpUtil.send404(res);
       return;
     }

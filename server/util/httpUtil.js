@@ -10,7 +10,6 @@ var
     //module libraries
   , log = require('logging');
 
-
 //sends a 404 message
 //@arg response object
 exports.send404 = function(res){
@@ -18,7 +17,6 @@ exports.send404 = function(res){
   res.write('404');
   res.end();
 }
-
 
 /*gets the actual system file path based on a request object
  *@arg obj.
@@ -33,18 +31,18 @@ exports.getSystemPathFromRequest = function(obj){
   var path = url.parse(req.url).pathname;
   //if the last character is a slash
 	if (path.charAt(path.length-1) == '/') {
-    //if the are requesting a subdirectory
+    //if it is a directory
     if (path.length > 1) {
       //we append index.html
       path += 'index.html';
     }
     else {
-      //they are requesting the root url
+      //requesting the root url
       path = '/index.html';
     }
   }
   //set the full path from the system root
-  //            app root/server/..up/client folder/requested file path
+  //        util root/..up/..up/client folder/requested file path
   return __dirname + '/../../' + clientFolderPath + path;
 }
 
