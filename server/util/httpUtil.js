@@ -77,7 +77,7 @@ var mimeMappings = {
 var mimeType = function(path) {
   //get the file extension
   var extension = path.split('.');
-  var extension = extension[extension.length-1];
+  extension = extension[extension.length-1];
 	//if a matching mimetype exists, return it otherwise return the default
   var mimeType = mimeMappings[extension];
   return (mimeType) ? mimeType : mimeMappings._default;
