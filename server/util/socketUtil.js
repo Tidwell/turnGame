@@ -10,16 +10,21 @@ require.paths.unshift('modules/');
 
 //assignments/loading
 var 
-      //module libraries
-      log = require('logging')
-      //cusom moduele objects
-    , messageEventEmitter = require('messageEventEmitter')
+    //module libraries
+    log = require('logging')
+    //cusom libraries
+    , messageEventEmitter = require('messageEventEmitter')    
+    //cusom module objects
     , auth = require('auth')
-    
-    var moduleEventEmit = new messageEventEmitter;
-    auth.listen(moduleEventEmit);
+  
+//create the event emitter the modules use to handle
+//messages from the client
+var moduleEventEmit = new messageEventEmitter;
 
-    //Object to store the users that are currently connected, indexed by sessionId
+//attach the listeners for each of the modules
+auth.listen(moduleEventEmit);
+
+//Object to store the users that are currently connected, indexed by sessionId
 var connectedUsers = {};
 
 /*when a user connects
