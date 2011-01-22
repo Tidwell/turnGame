@@ -12,7 +12,7 @@ function ExampleSharedClass() {
   };
 }
 
-//if the server includes us, we need to return a constructor
+//if the server includes us, we need a constructor
 if (typeof exports != 'undefined') {
-  exports.share = function() { return new ExampleSharedClass; }
- }
+  exports.ExampleSharedClass = (function() { return new ExampleSharedClass; })();
+}

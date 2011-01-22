@@ -13,7 +13,12 @@
   
     <script type="text/javascript">
 			$(function() { //on DOM ready 
+        var socket = new io.Socket(null, {port: 8080, rememberTransport: false});
+        socket.connect();
+        
+        socket.send({event: 'setName', args: {name: 'Tidwell'}});
         var shared = new ExampleSharedClass;
+        console.log(shared);
         console.log(shared.publicMethod());
         console.log(shared.publicAttribute);
       });

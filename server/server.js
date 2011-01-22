@@ -25,7 +25,7 @@ var
   //custom objects  
   , httpUtil = require('httpUtil.js')
   , socketUtil = require('socketUtil.js')
-  , share = require('example.js').share();
+  , share = require('example.js').ExampleSharedClass;
 
 //example that we can share a class with the client..
 log(share.publicMethod());
@@ -66,18 +66,18 @@ var io = io.listen(server);
 //when connected
 io.on('connection', function(client){
   //handle the user connecting
-  socketUtil.connect({client: client});
+  socketUtil.connect({client: client, socket: io});
   
   //setup the message event listener for when a message is recieved from the client
   client.on('message', function(message){
     //pass it to the handler
-		socketUtil.message({client: client, message: message});
+		socketUtil.message({client: client, message: message, socket: io});
 	});
 
   //on disconnect
 	client.on('disconnect', function(){
     //tell the handler that the user diconnected
-    socketUtil.disconnect({client: client});
+    socketUtil.disconnect({client: client, socket: io});
   });
 	
 });
