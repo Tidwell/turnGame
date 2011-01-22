@@ -9,6 +9,7 @@ socket requests are routed through util/socketUtil.js
 
 //add our require paths to the require array
 require.paths.unshift('util/');
+require.paths.unshift('shared/');
 
 //assignments/loading
 var 
