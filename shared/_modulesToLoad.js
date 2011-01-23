@@ -2,7 +2,7 @@
 var list = [
     'auth',
     'matchmaker',
-    'gamestate'
+    'gameaction'
 ]
 
 

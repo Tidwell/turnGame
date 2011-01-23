@@ -4,6 +4,8 @@
   border: 1px solid;
   width: 300px;
   display: none;
+  overflow: hidden;
+  position: relative;
 }
 .module h2 {
   font-size: 24px;
@@ -20,12 +22,26 @@
 .error {
   background: #e2a89a;
 }
-.success {
+.success,
+.active {
   background: #9ae2a4;
 }
 img.loading {
   display: block;
   margin: 0 auto;
+}
+.showlink {
+  position: absolute;
+  text-align: right;
+  font-size: 12px;
+  bottom: 5px;
+  right: 5px;
+  cursor: pointer;
+  color: blue;
+  display: none;
+}
+.showlink:focus, .showlink:hover {
+  text-decoration: underline;
 }
 
 #auth form {
@@ -38,3 +54,23 @@ img.loading {
   padding: 10px;
   margin: 0 auto;
 }
+
+#gamestate li {
+  padding: 2px;
+  margin: 1px;
+}
+
+#gamestate table {
+  border: 0;
+  background: url(/images/gameboard.png);
+}
+#gamestate tr {
+  height: 100px;
+}
+#gamestate td {
+  width: 100px;
+  text-align: center;
+  font-size: 100px;
+  line-height: 100px;
+}
+

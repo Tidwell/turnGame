@@ -17,9 +17,25 @@ function auth(socket) {
   *             .name      name set to
   */
   this.nameSet = function(args) {
-    $('#auth .success').html('Name changed to '+args.name).fadeIn().delay(2000).fadeOut();
+    $('#auth .success').html('Name changed to '+args.name).fadeIn().delay(2000).fadeOut(function() {
+      //hide the form and title
+      $('#auth h2').fadeOut();
+      $('#auth form').fadeOut(function() {
+        //show the link
+        $('#auth .showlink').fadeIn();
+      })
+    });
+    //re-endable the submit button
     $('#setName').find('input[type=submit]').attr('disabled', false);
   }
+  
+  $('#auth .showlink').click(function() {
+    $('#auth .showlink').fadeOut(function() {
+      $('#auth form').fadeIn();
+      $('#auth h2').fadeIn();
+    });
+    return false;
+  });
   
   //bind the setName form submission
   $('#setName').submit(function() {

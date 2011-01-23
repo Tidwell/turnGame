@@ -15,7 +15,7 @@ function matchmaker(socket) {
   */
   this.gameStart = function() {
     $('#matchmaker').fadeOut(function() {
-      modules.gamestate.gameShow();
+      modules.gameaction.gameShow();
     });
   }
   

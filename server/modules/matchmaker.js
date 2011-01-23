@@ -49,7 +49,7 @@ function matchmaker() {
     });
     if (emptyGame != null) {
       //if we found a game
-      obj.games[emptyGame].addPlayer({socket: obj.socket, client: obj.client});
+      obj.games[emptyGame].addPlayer({socket: obj.socket, client: obj.client, connectedUsers: obj.connectedUsers});
       //log(obj.games);
       return true;
     }
