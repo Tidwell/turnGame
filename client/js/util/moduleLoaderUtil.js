@@ -1,3 +1,8 @@
+//create object to hold the modules, keyed by name
+//this is in global scope so the modules can all access it
+var modules = {};
+
+
 var moduleLoaderUtil = function(socket) { 
   this.load = function(callback) {
     //get the list of modules to load (from shared class included on index)
@@ -9,16 +14,44 @@ var moduleLoaderUtil = function(socket) {
     });
     var totalLoadedModules = 0;
     var moduleLoadComplete = function(moduleName) {
+      
       //initialize the module 
       //--- DIRTY UGLY EVAL, so we make sure the module name only contains numbers and letters
-      var regex=/[A-Za-z0-9]$/;
+      var regex=/^[a-zA-Z0-9]+$/;
       if(!regex.test(moduleName)) return;
       //if it passed, we create it using eval *bleh*
       var module = eval('new '+moduleName+'(socket)');
+      //add it to the module list
+      modules[moduleName] = module;
+      //create an array to hold the list of methods in the modules
+      //each method represents a handler for an event
+      var eventListeners = {};
+      for (property in module) {
+        //if it doesnt already exist
+        if (!eventListeners[property]) {
+          //create an array to hold the modules with a listener for this event
+          eventListeners[property] = [];
+        }
+        //add this module to the list
+        eventListeners[property].push(module);
+      }
       //increase the total number of loaded modules
       totalLoadedModules++;
       //when all the modules have loaded
       if (totalLoadedModules == list.length) {
+        for (property in modules) {
+          //modules[property].modules = modules;
+        }
+        //bind the socket message handler
+        //when we get a message from the server
+        socket.on('message', function(obj){
+          //for each event listener for this type
+          eventListeners[obj.type].forEach(function(module) {
+              //execute it
+              module[obj.type](obj.args);
+          })
+        });
+        
         //run the users callback
         callback();
       }

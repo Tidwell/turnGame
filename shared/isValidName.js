@@ -3,7 +3,7 @@ function isValidName() {
   return {
     check: function(name) {
       //make sure it only contains A-Z, a-z, 0-9
-      var regex=/[A-Za-z0-9]$/;
+      var regex=/^[a-zA-Z0-9]+$/;
       //if it didnt pass
       if(!regex.test(name)) return false;
       //otherwise we are good

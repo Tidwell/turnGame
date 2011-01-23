@@ -36,6 +36,7 @@ function auth(eventEmitter) {
   this.setName = function(obj) {
     if(isValidName.check(obj.args.name)) {
       obj.connectedUsers[obj.client.sessionId].name = obj.args.name;
+      obj.client.send({type: 'nameSet', args: {name: obj.args.name}});
       log(obj.connectedUsers);
     }
   }

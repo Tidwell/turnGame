@@ -10,22 +10,28 @@ var isValidName = new isValidName;
 function auth(socket) {
   //to avoid this confusion
   var auth = this;
-  //method to send a setName request to the server
-  //@args name  STRING
-  this.setName = function(name) {
-    socket.send({event: 'setName', args: {name: name}});
+ 
+  /*
+  *Called when a nameSet command comes from the server
+  *@arg     args           the arguments the server sent with the message
+  *             .name      name set to
+  */
+  this.nameSet = function(args) {
+    $('#auth .success').html('Name changed to '+args.name).fadeIn().delay(2000).fadeOut();
+    console.log(modules);
   }
   
   //bind the setName form submission
   $('#setName').submit(function() {
-    //hide the error if there was one
+    //hide the error/success if there was one
     $('#auth .error').hide();
+    $('#auth .success').hide();
     //get the name from the input textbox in the form
     var name = $(this).find('input[type=text]').val();
     //use our shared isValidName class to see if the name is valid
     if (isValidName.check(name)) {
       //send the request to the server to change the name
-      auth.setName(name);
+      socket.send({event: 'setName', args: {name: name}});
     }
     else {
       //show and update the eerror
