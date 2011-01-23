@@ -6,6 +6,7 @@ Tracks connected users in memory
 
 //add our require paths to the require array
 require.paths.unshift('util/');
+require.paths.unshift('../../shared/');
 require.paths.unshift('modules/');
 
 //assignments/loading
@@ -15,7 +16,7 @@ var
     //cusom libraries
     , messageEventEmitter = require('messageEventEmitter')    
     //cusom module objects
-    , modulesToLoad = require('_toLoad').list
+    , modulesToLoad = require('_modulesToLoad').list
   
 //create the event emitter the modules use to handle
 //messages from the client

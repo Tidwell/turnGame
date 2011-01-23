@@ -3,15 +3,19 @@ Module for handling user authentication
 .setName = sets a users name attribute in the connectedUsers
 */
 
+//assignment/loading
+var 
+      log = require('logging');
 
 //Module Declaration
 function AuthenticationModule(eventEmitter) {
-  /*
+  /* REQUIRED ON EVERY MODULE
   *Called when the module is loaded, sets up event listeners
   *@arg eventEmitter    the event emitter object to attach events to
   */
   this.listen = function(eventEmitter) {
-    //declare the event listeners
+    //declare the event listeners, first arg is the name of the 
+    //event the client will send, second is the method to handle that event
     eventEmitter.on('setName', this.setName);
   }
   
