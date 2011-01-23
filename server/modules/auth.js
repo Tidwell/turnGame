@@ -4,19 +4,17 @@ Module for handling user authentication
 */
 
 
-//assignments/loading
-var   log = require('logging')
-    
-//called when the module is loaded
-exports.listen = function(eventEmitter) {
-  //create a new instance of the module
-  var auth = new AuthenticationModule(eventEmitter);
-  //declare the event listeners
-  eventEmitter.on('setName', auth.setName);
-}
-
 //Module Declaration
 function AuthenticationModule(eventEmitter) {
+  /*
+  *Called when the module is loaded, sets up event listeners
+  *@arg eventEmitter    the event emitter object to attach events to
+  */
+  this.listen = function(eventEmitter) {
+    //declare the event listeners
+    eventEmitter.on('setName', this.setName);
+  }
+  
   /*
   *Called when a user sends a setName command
   *sets a user's name attribute in their entry in the connectedUsers object
@@ -31,3 +29,6 @@ function AuthenticationModule(eventEmitter) {
     obj.connectedUsers[obj.client.sessionId].name = obj.args.name;
   }
 }
+
+//declare the module
+module.exports = AuthenticationModule;

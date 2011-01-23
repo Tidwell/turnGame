@@ -15,14 +15,18 @@ var
     //cusom libraries
     , messageEventEmitter = require('messageEventEmitter')    
     //cusom module objects
-    , auth = require('auth')
+    , modulesToLoad = require('_toLoad').list
   
 //create the event emitter the modules use to handle
 //messages from the client
 var moduleEventEmit = new messageEventEmitter;
 
 //attach the listeners for each of the modules
-auth.listen(moduleEventEmit);
+modulesToLoad.forEach(function(moduleName) {
+  var modulePrototype = require(moduleName);
+  var module = new modulePrototype;
+  module.listen(moduleEventEmit);
+})
 
 //Object to store the users that are currently connected, indexed by sessionId
 var connectedUsers = {};
