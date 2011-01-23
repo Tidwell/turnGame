@@ -3,12 +3,16 @@ Module for handling user authentication
 .setName = sets a users name attribute in the connectedUsers
 */
 
+//add our require paths to the require array
+require.paths.unshift('shared/');
+
 //assignment/loading
 var 
+      isValidName = require('isValidName').isValidName,
       log = require('logging');
 
 //Module Declaration
-function AuthenticationModule(eventEmitter) {
+function auth(eventEmitter) {
   /* REQUIRED ON EVERY MODULE
   *Called when the module is loaded, sets up event listeners
   *@arg eventEmitter    the event emitter object to attach events to
@@ -30,9 +34,12 @@ function AuthenticationModule(eventEmitter) {
   *         connectedUsers object of connected users, indexed by session id
   */
   this.setName = function(obj) {
-    obj.connectedUsers[obj.client.sessionId].name = obj.args.name;
+    if(isValidName.check(obj.args.name)) {
+      obj.connectedUsers[obj.client.sessionId].name = obj.args.name;
+      log(obj.connectedUsers);
+    }
   }
 }
 
 //declare the module
-module.exports = AuthenticationModule;
+module.exports = auth;

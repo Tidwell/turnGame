@@ -4,41 +4,46 @@
 		<title>Tic-Tac-Toe M-M-O</title>
 		<link rel="stylesheet" type="text/css" href="/css/reset.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common.css" />
-		
+		<!--jquery-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <!--socket connection-->
 		<script src="/js/json.js"></script> <!-- for ie -->
 		<script src="/socket.io/socket.io.js"></script>
+    <!-- module loading-->
     <script src="/shared/_modulesToLoad.js"></script>
     <script src="/js/util/moduleLoaderUtil.js"></script>
-  
+    <!--shared classes-->
     <script src="/shared/example.js"></script>
-    
-  
+    <script src="/shared/isValidName.js"></script>
+
     <script type="text/javascript">
 			$(function() { //on DOM ready 
-        //create the socket connection
+        //create the socket connection and connect
         var socket = new io.Socket(null, {port: 8080, rememberTransport: false});
         socket.connect();
-        //get the list of modules to load (shared class)
-        var list = new modulesToLoad;
-        //create the module loader object
-        var moduleLoader = new moduleLoaderUtil;
-        //load the modules
-        moduleLoader.load(list, function() {
+        
+        //create the module loader object and pass it the socket
+        var moduleLoader = new moduleLoaderUtil(socket);
+        
+        //load the modules, passing a callback for when all modules are loaded
+        moduleLoader.load(function() {
           alert('all modules loaded');
-          var auth = new AuthenticationModule(socket);
-          auth.setName('Tidwell');
         });
         
         //example of a shared calss
         var shared = new ExampleSharedClass;
-        console.log(shared);
-        console.log(shared.publicMethod());
-        console.log(shared.publicAttribute);
+        //console.log(shared);
+        //console.log(shared.publicMethod());
+        //console.log(shared.publicAttribute);
       });
 		</script>
 	</head>
 	<body>
-    Sup
+    <!--HTML for the auth Module-->
+    <div id="auth">
+      <h2>Auth Module</h2>
+      <form id="setName">Name: <input type="text" /><input type="submit"value="Set" /></form>
+      <p class="error"></p>
+    </div>
   </body>
 </html>

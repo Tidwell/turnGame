@@ -1,0 +1,24 @@
+.error {
+  color: red;
+}
+
+#auth {
+  padding: 20px;
+  margin: 10px auto;
+  border: 1px solid;
+  width: 300px;
+}
+#auth h2 {
+  font-size: 24px;
+  text-align: center;
+  margin: 5px auto;
+}
+#auth form {
+  text-align: center;
+  margin: 0 auto;
+}
+#auth p.error {
+  display: block;
+  margin: 2px 0;
+  text-align: center;
+}
