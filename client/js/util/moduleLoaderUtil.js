@@ -13,8 +13,9 @@ var moduleLoaderUtil = function(socket) {
       $.getScript('/js/modules/'+moduleName+'.js', function(){ moduleLoadComplete(moduleName) });
     });
     var totalLoadedModules = 0;
+    var eventListeners = {};
+    
     var moduleLoadComplete = function(moduleName) {
-      
       //initialize the module 
       //--- DIRTY UGLY EVAL, so we make sure the module name only contains numbers and letters
       var regex=/^[a-zA-Z0-9]+$/;
@@ -25,7 +26,6 @@ var moduleLoaderUtil = function(socket) {
       modules[moduleName] = module;
       //create an array to hold the list of methods in the modules
       //each method represents a handler for an event
-      var eventListeners = {};
       for (property in module) {
         //if it doesnt already exist
         if (!eventListeners[property]) {
@@ -45,13 +45,18 @@ var moduleLoaderUtil = function(socket) {
         //bind the socket message handler
         //when we get a message from the server
         socket.on('message', function(obj){
-          //for each event listener for this type
-          eventListeners[obj.type].forEach(function(module) {
-              //execute it
-              module[obj.type](obj.args);
-          })
+          //make sure we have a listener bound for this event type
+          if (eventListeners[obj.type]) {
+            //for each event listener for this type
+            eventListeners[obj.type].forEach(function(module) {
+                //execute it
+                module[obj.type](obj.args);
+            })
+          }
+          else {
+            throw new Error("No module with listener for event type "+obj.type);
+          }
         });
-        
         //run the users callback
         callback();
       }

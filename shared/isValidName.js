@@ -14,5 +14,5 @@ function isValidName() {
 
 //if the server includes us, we need a constructor
 if (typeof exports != 'undefined') {
-  exports.isValidName = (function() { return new isValidName; })();
+  module.exports = isValidName;
 }

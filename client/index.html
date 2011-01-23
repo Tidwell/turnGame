@@ -27,7 +27,10 @@
         
         //load the modules, passing a callback for when all modules are loaded
         moduleLoader.load(function() {
-          alert('all modules loaded');
+          $('#loading').fadeOut(function() {
+            $('#auth').fadeIn();
+            $('#matchmaker').fadeIn();
+          });
         });
         
         //example of a shared calss
@@ -40,11 +43,29 @@
 	</head>
 	<body>
     <!--HTML for the auth Module-->
-    <div id="auth">
+    <div id="auth" class="module">
       <h2>Auth Module</h2>
       <form id="setName">Name: <input type="text" /><input type="submit"value="Set" /></form>
       <p class="error" style="display: none"></p>
       <p class="success" style="display: none"></p> 
+    </div>
+    <!--HTML for the matchmaker Module-->
+    <div id="matchmaker" class="module">
+      <h2>Matchmaker Module</h2>
+      <button>Play a Game</button>
+      <img class="loading" src="images/loading.gif" alt="Loading..." style="display: none" />
+      <p class="error" style="display: none"></p>
+    </div>
+    <!--HTML for the matchmaker Module-->
+    <div id="gamestate" class="module">
+      <h2>Gamestate Module</h2>
+      <ul class="players"></ul>
+      <p class="error" style="display: none"></p>
+    </div>
+    
+    <!--Shown while modules are loading-->
+    <div id="loading" class="module" style="display: block;">
+      <img class="loading" src="images/loading.gif" alt="Loading..." />
     </div>
   </body>
 </html>

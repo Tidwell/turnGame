@@ -8,11 +8,13 @@ require.paths.unshift('shared/');
 
 //assignment/loading
 var 
-      isValidName = require('isValidName').isValidName,
+      isValidName = require('isValidName'),
       log = require('logging');
 
+//create validName object
+var isValidName = new isValidName;
 //Module Declaration
-function auth(eventEmitter) {
+function auth() {
   /* REQUIRED ON EVERY MODULE
   *Called when the module is loaded, sets up event listeners
   *@arg eventEmitter    the event emitter object to attach events to
@@ -32,12 +34,12 @@ function auth(eventEmitter) {
   *             .name      name the player is requesting
   *         socket         the socket object
   *         connectedUsers object of connected users, indexed by session id
+  *         games          array of all games
   */
   this.setName = function(obj) {
     if(isValidName.check(obj.args.name)) {
       obj.connectedUsers[obj.client.sessionId].name = obj.args.name;
       obj.client.send({type: 'nameSet', args: {name: obj.args.name}});
-      log(obj.connectedUsers);
     }
   }
 }

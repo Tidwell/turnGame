@@ -18,11 +18,12 @@ function auth(socket) {
   */
   this.nameSet = function(args) {
     $('#auth .success').html('Name changed to '+args.name).fadeIn().delay(2000).fadeOut();
-    console.log(modules);
+    $('#setName').find('input[type=submit]').attr('disabled', false);
   }
   
   //bind the setName form submission
   $('#setName').submit(function() {
+    $('#setName').find('input[type=submit]').attr('disabled', true);
     //hide the error/success if there was one
     $('#auth .error').hide();
     $('#auth .success').hide();
@@ -31,11 +32,12 @@ function auth(socket) {
     //use our shared isValidName class to see if the name is valid
     if (isValidName.check(name)) {
       //send the request to the server to change the name
-      socket.send({event: 'setName', args: {name: name}});
+      socket.send({type: 'setName', args: {name: name}});
     }
     else {
       //show and update the eerror
       $('#auth .error').html('Name can only contain numbers and letters').fadeIn();
+      $('#setName').find('input[type=submit]').attr('disabled', false);
     }
     return false;
   });

@@ -1,6 +1,8 @@
 //The list of modules you want to load on the server & client
 var list = [
-    'auth'
+    'auth',
+    'matchmaker',
+    'gamestate'
 ]
 
 
@@ -15,5 +17,5 @@ function modulesToLoad() {
 }
 //if the server includes us, we also need to return the list
 if (typeof exports != 'undefined') {
-  exports.list = list;
+  module.exports = list;
 }

@@ -1,29 +1,40 @@
+.module{ 
+  padding: 20px;
+  margin: 10px auto;
+  border: 1px solid;
+  width: 300px;
+  display: none;
+}
+.module h2 {
+  font-size: 24px;
+  text-align: center;
+  margin: 5px auto;
+}
+.error,
+.success {
+  display: block;
+  margin: 2px 0;
+  padding: 2px;
+  text-align: center;
+}
 .error {
   background: #e2a89a;
 }
 .success {
   background: #9ae2a4;
 }
+img.loading {
+  display: block;
+  margin: 0 auto;
+}
 
-#auth { 
-  padding: 20px;
-  margin: 10px auto;
-  border: 1px solid;
-  width: 300px;
-}
-#auth h2 {
-  font-size: 24px;
-  text-align: center;
-  margin: 5px auto;
-}
 #auth form {
   text-align: center;
   margin: 0 auto;
 }
-#auth p.error,
-#auth p.success {
+#matchmaker button {
   display: block;
-  margin: 2px 0;
-  padding: 2px;
-  text-align: center;
+  font-size: 24px;
+  padding: 10px;
+  margin: 0 auto;
 }

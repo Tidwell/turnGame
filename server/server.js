@@ -9,7 +9,6 @@ socket requests are routed through util/socketUtil.js
 
 //add our require paths to the require array
 require.paths.unshift('util/');
-require.paths.unshift('../shared/');
 
 //assignments/loading
 var 
@@ -25,11 +24,6 @@ var
   //custom objects  
   , httpUtil = require('httpUtil.js')
   , socketUtil = require('socketUtil.js')
-  , share = require('example.js').ExampleSharedClass;
-
-//example that we can share a class with the client..
-log(share.publicMethod());
-log(share.publicAttribute);  
 
 //path to where all the front-end code lives (html/css/js)
 //relative to the root dir, without leading or trailing /
