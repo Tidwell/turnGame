@@ -14,6 +14,9 @@ function gameaction() {
   this.listen = function(eventEmitter) {
     eventEmitter.on('placeLetter', this.placeLetter);
   }
+  
+  
+  
 /*
   *Called when a user sends a placeLetter command
   *

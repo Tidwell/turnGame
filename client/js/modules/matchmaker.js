@@ -18,6 +18,16 @@ function matchmaker(socket) {
       modules.gameaction.gameShow();
     });
   }
+  this.endGame = function(winLoss) {
+    $('#gamestate').fadeOut(function() {
+      $('#matchmaker button').show();
+      $('#matchmaker .loading').hide();
+      $('#matchmaker h3').hide();
+      $('#matchmaker .'+winLoss).show();
+      $('#matchmaker').fadeIn();
+    });
+  }
+  
   
   $('#matchmaker button').click(function() {
     $(this).hide();

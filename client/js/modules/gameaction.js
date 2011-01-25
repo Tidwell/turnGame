@@ -7,7 +7,7 @@ All DOM event bindings inside this object will be bound
 function gameaction(socket) {
   //to avoid this confusion
   var game = this;
-  this.myId = socket.transport.sessionId;
+  this.mysocket = socket;
   
   this.gameShow = function() {
     $('#gamestate').fadeIn();
@@ -19,7 +19,8 @@ function gameaction(socket) {
   *             .players   the players in the game
   */
   this.gameStart = function(args) {
-    //remove any existing player information
+    //remove any existing player information and reset the board
+    $('#gamestate td').html(' ');
     $('#gamestate ul li').remove();
     //add the new player info
     args.players.forEach(function(player) {
@@ -53,6 +54,16 @@ function gameaction(socket) {
   
   this.boardUpdate = function(args) {
     $('#gamestate td[rel=x'+args.change.x+'y'+args.change.y+']').html(args.value);
+  }
+  
+  this.gameOver = function(args) {
+    //console.log(args.winner.winner, this.mysocket.transport.sessionid);
+    if (Number(this.mysocket.transport.sessionid) == args.winner) {
+      modules.matchmaker.endGame('win');
+    }
+    else {
+      modules.matchmaker.endGame('lost');
+    }
   }
   
   $('#gamestate td').click(function() {

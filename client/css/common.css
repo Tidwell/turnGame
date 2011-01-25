@@ -53,6 +53,7 @@ img.loading {
   font-size: 24px;
   padding: 10px;
   margin: 0 auto;
+  width: 180px;
 }
 
 #gamestate li {
@@ -74,3 +75,9 @@ img.loading {
   line-height: 100px;
 }
 
+#matchmaker h3 {
+  text-align: center;
+  margin: 10px auto;
+  font-size: 30px;
+  display: none;
+}
