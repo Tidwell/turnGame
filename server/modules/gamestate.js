@@ -2,9 +2,11 @@
 Module for a gamestate
 */
 
+require.paths.unshift('system/');
 
 var 
       log = require('logging');
+      characters = require('characters');
 
 function gamestate(eventEmitter) {
   /* REQUIRED ON EVERY MODULE
@@ -17,14 +19,10 @@ function gamestate(eventEmitter) {
 
   }
 
+  this.maxPlayers = 1;
   this.activePlayer = 0;
   this.players = [];
-  this.board = 
-  [
-  [' ',' ',' '],
-  [' ',' ',' '],
-  [' ',' ',' ']
-  ]
+  this.map;
   
   /*
   *Adds a player to the game.  If the game is full, begins the game
@@ -38,7 +36,7 @@ function gamestate(eventEmitter) {
     //add the player to the game
     this.players.push(obj.client.sessionId);
     //if the game has 2 players in it
-    if (this.players.length == 2) {
+    if (this.players.length == this.maxPlayers) {
       //tell the players the game begins
       this.sendAllPlayers({type: 'gameStart', args: {players: this.players}}, obj.socket);
       var playerNames = [];
@@ -48,44 +46,46 @@ function gamestate(eventEmitter) {
       });
       this.sendAllPlayers({type: 'playerNames', args: {players: playerNames}}, obj.socket);
       //init the game
+      this.makeMap(obj);
       this.beginGame(obj.socket);
     }
   }
   
+  this.makeMap = function(obj) {
+    var map = {}
+    map.hexes = [];
+    var q = 0;
+    while (q<8) {
+      var i = 0;
+      while (i<6) {
+        if ((i==0 && q==0) ||
+            (i==5 && q==7)) {
+        }
+        else {
+          var z = Math.floor(Math.random()*3);
+          map.hexes.push({
+            x: q,
+            y: i,
+            z: (Math.floor(Math.random()*3) == 1) ? z : 0 
+          })
+        }
+        i++;
+      }
+      q++;    
+    }
+    map.startRed = {x: 0, y: 1}
+    this.map = map;
+    this.sendAllPlayers({type: 'renderMap', args: {map: this.map}}, obj.socket); 
+  }
+  
   this.beginGame = function(socket) {
-    this.activePlayer = this.players[Math.floor(Math.random()*2)];
+    this.activePlayer = this.players[Math.floor(Math.random()*this.maxPlayers)];
     this.sendAllPlayers({type: 'activePlayer', args: {player: this.activePlayer}}, socket);
   }
   
-  this.placeLetter = function(obj) {
-    //find out if the command comes from the active player
-    if (obj.client.sessionId == this.activePlayer) {
-      //get the current value on the board at the position
-      var boardPosition = this.board[obj.args.y][obj.args.x];
-      if (boardPosition == ' ') { //empty
-        if (this.players[0] == obj.client.sessionId) {
-          boardPosition = 'X';
-        }
-        else {
-          boardPosition = 'O'
-        }
-        //set the value on the board
-        this.board[obj.args.y][obj.args.x] = boardPosition;
-        //tell the players
-        this.sendAllPlayers({type: 'boardUpdate', args: {change: obj.args, value: boardPosition}}, obj.socket);
-        var isWinner = this.checkGameEnd();
-        if (isWinner != false) {
-          obj.winner = isWinner
-          this.gameOver(obj);
-          return false;
-        }
-        //change the active player
-        this.activePlayer = (boardPosition=='X') ? this.players[1] : this.players[0];
-        //tell the players
-        this.sendAllPlayers({type: 'activePlayer', args: {player: this.activePlayer}}, obj.socket);
-      }
-    }
-  }
+ 
+  
+  
   
   this.gameOver = function(obj) {
     this.sendAllPlayers({type: 'gameOver', args: {winner: obj.winner}}, obj.socket);
@@ -94,39 +94,7 @@ function gamestate(eventEmitter) {
   
   this.checkGameEnd = function() {
     var players = this.players;
-    var nullToken = ' ';
-    
-    //rows
-    var numRows = this.board.length;
-    var i = 0;
-    while (i< numRows) {
-      var row = this.board[i];
-      if ((row[0] == row[1] && row[0] == row[2]) && row[0] != nullToken) {
-        //game over
-        return toReturn = (row[0] == 'X') ? players[0] : players[1];
-      }
-      i++;
-    }
-    
-    //columns
-    var i = 0;
-    var numCols = this.board[0].length;
-    while (i<numCols) {
-      if (this.board[0][i] == this.board[1][i] && this.board[0][i] == this.board[2][i] && this.board[0][i] != nullToken) {
-        return (this.board[0][i] == 'X') ? players[0] : players[1];
-      }      
-      i++;
-    }
-    
-    //diagonals
-    if (this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2] && this.board[0][0] != nullToken) {
-      //game over
-      return (this.board[0][0] == 'X') ? this.players[0] : this.players[1];
-    }
-    if (this.board[2][0] == this.board[1][1] && this.board[2][0] == this.board[0][2] && this.board[2][0] != nullToken) {
-      //game over
-      return (this.board[2][0] == 'X') ? this.players[0] : this.players[1];
-    }
+  
     return false;
   }
   

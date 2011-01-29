@@ -65,7 +65,7 @@ function matchmaker() {
     var i = 0;
     //find the first empty game
     obj.games.forEach(function(game) {
-      if (game.getPlayers().length == 1) {
+      if (game.getPlayers().length != game.maxPlayers) {
         emptyGame = i;
       }
       i++;
@@ -78,7 +78,7 @@ function matchmaker() {
     }
     //otherwise create a new gamestate
     var g = new gamestate(matchmaker.eventEmitter);
-    g.addPlayer({socket: obj.socket, client: obj.client});
+    g.addPlayer({socket: obj.socket, client: obj.client, connectedUsers: obj.connectedUsers});
     obj.games.push(g);
   }
 }

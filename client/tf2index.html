@@ -3,129 +3,107 @@
 	<head>
 		<title>TurnFortress2</title>
 		<link rel="stylesheet" type="text/css" href="/css/reset.css" />
-		<link rel="stylesheet" type="text/css" href="/css/tf2.css" />
+		<link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/tf2.css" />
 		<!--jquery-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     
+    
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <!--socket connection-->
+		<script src="/js/json.js"></script> <!-- for ie -->
+		<script src="/socket.io/socket.io.js"></script>
+    <!-- module loading-->
+    <script src="/shared/_modulesToLoad.js"></script>
+    <script src="/js/util/moduleLoaderUtil.js"></script>
+    <!--shared classes-->
+    <script src="/shared/example.js"></script>
+    <script src="/shared/isValidName.js"></script>
+
     <script type="text/javascript">
-      $(document).ready(function() {
-        var height = $('#map').height()-95;
-        var width = $('#map').width();
+			$(function() { //on DOM ready 
+        //create the socket connection and connect
+        var socket = new io.Socket(null, {port: 8080, rememberTransport: false});
+        socket.connect();
         
-
-        var q = 0;
-        while (q<8) {
-          var i = 0;
-          while (i<6) {
-            if (
-              (i==0 && q==0) ||
-              (i==5 && q==7)
-            ) {
-            }
-            else {
-              var hex = $('<div class="hex"></div>').appendTo('#map #hexContainer');
-              hex.css('top', 0-(34*i)+(11*q)); //29, 7
-              hex.css('left', 0+(94*q)+(72*i)); //58, 42
-              hex.css('z-index', 10-i);
-              hex.data('column', q);
-              hex.data('row', i);
-              hex.attr('rel', 'x'+q+'y'+i);
-              hex.text('x'+q+'y'+i);
-              if (Math.floor(Math.random()*3) == 1) {
-  //if (false) {
-                var amnt = 18*(Math.floor(Math.random()*3));
-                hex.animate({
-                  top: '-='+amnt
-                },2000);
-              }
-            }
-            i++;
-          }
-          q++;
-        }
-
-        var i = 0;
-        var randHex = function() {
-          var hex = Math.floor(Math.random()*50);
-          console.log(hex);
-          return hex;
-        }
-
+        //create the module loader object and pass it the socket
+        var moduleLoader = new moduleLoaderUtil(socket);
         
-        $($('.hex')[randHex()]).append('<div class="char spy"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char engineer"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char heavy"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char soldier"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char medic"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char pyro"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char demo"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char scout"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char sniper"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char sentry"><div class="img"></div></div>');
-        
-         $($('.hex')[randHex()]).append('<div class="char spy"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char engineer"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char heavy"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char soldier"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char medic"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char pyro"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char demo"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char scout"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char sniper"><div class="img"></div></div>');
-        $($('.hex')[randHex()]).append('<div class="char sentry"><div class="img"></div></div>');
-
-        $('.hex').each(function() {
-          var num = $(this).children().length;
-          $(this).addClass('chars'+num);
+        //load the modules, passing a callback for when all modules are loaded
+        moduleLoader.load(function() {
+          $('#loading').fadeOut(function() {
+            $('#auth').hide();
+            $('#matchmaker').show();
+            $('#gamestate').hide();
+          });
         });
         
-        $('.char').each(function() {
-          if (Math.floor(Math.random()*3) == 1) {
-            $(this).addClass('highlight');
-          }
-        });
-       
       });
-    </script>
+		</script>
   </head>
 	<body>
-    <div id="playerchars">
-      <ul class="characters">
-        <li class="spythumb"></li>
-        <li class="sniperthumb"></li>
-        <li class="scoutthumb"></li>
-        <li class="medicthumb"></li>
-        <li class="heavythumb"></li>
-        <li class="engiethumb"></li>
-        <li class="demothumb"></li>
-        <li class="pyrothumb"></li>
-        <li class="soldierthumb"></li>
-        <li class="sentrythumb"></li>
-      </ul>
-      <ul class="characters">
-        <li class="spythumb"></li>
-        <li class="sniperthumb"></li>
-        <li class="scoutthumb"></li>
-        <li class="medicthumb"></li>
-        <li class="heavythumb"></li>
-        <li class="engiethumb"></li>
-        <li class="demothumb"></li>
-        <li class="pyrothumb"></li>
-        <li class="soldierthumb"></li>
-        <li class="sentrythumb"></li>
-      </ul>
+    <!--HTML for the auth Module-->
+    <div id="auth" class="module" style="display: none">
+      <h2>Auth Module</h2>
+      <form id="setName">Name: <input type="text" /><input type="submit"value="Set" /></form>
+      <p class="error" style="display: none"></p>
+      <p class="success" style="display: none"></p>
+      <a class="showlink">show Auth Modules</a>
     </div>
-    <div id="map">
-        <div id="hexContainer">
-        
-        </div>
-        <div id="mask">
-       
-        </div>
-    </div> 
+    <!--HTML for the matchmaker Module-->
+    <div id="matchmaker" class="module">
+      <h2>Matchmaker Module</h2>
+      <h3 class="win">You Won!</h3>
+      <h3 class="lost">You Lost</h3>
+      <button>Play a Game</button>
+      <img class="loading" src="images/loading.gif" alt="Loading..." style="display: none" />
+      <p class="error" style="display: none"></p>
+    </div>
     
-    <div class="character large">
-      <img src="images/characters/
+    <div id="gamestate" style="display: none">
+      <ul id="players" class="players">
+      
+      </ul>
+      <div id="playerchars">
+        <ul class="characters">
+          <li class="spythumb"></li>
+          <li class="sniperthumb"></li>
+          <li class="scoutthumb"></li>
+          <li class="medicthumb"></li>
+          <li class="heavythumb"></li>
+          <li class="engiethumb"></li>
+          <li class="demothumb"></li>
+          <li class="pyrothumb"></li>
+          <li class="soldierthumb"></li>
+          <li class="sentrythumb"></li>
+        </ul>
+        <ul class="characters">
+          <li class="spythumb"></li>
+          <li class="sniperthumb"></li>
+          <li class="scoutthumb"></li>
+          <li class="medicthumb"></li>
+          <li class="heavythumb"></li>
+          <li class="engiethumb"></li>
+          <li class="demothumb"></li>
+          <li class="pyrothumb"></li>
+          <li class="soldierthumb"></li>
+          <li class="sentrythumb"></li>
+        </ul>
+      </div>
+      <div id="map">
+          <div id="hexContainer">
+          
+          </div>
+          <div id="mask">
+         
+          </div>
+      </div> 
+    </div>
+    
+   <!--Shown while modules are loading-->
+    <div id="loading" class="module" style="display: block;">
+      <img class="loading" src="images/loading.gif" alt="Loading..." />
     </div>
   </body>
 </html>

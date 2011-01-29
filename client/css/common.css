@@ -1,17 +1,3 @@
-.module{ 
-  padding: 20px;
-  margin: 10px auto;
-  border: 1px solid;
-  width: 300px;
-  display: none;
-  overflow: hidden;
-  position: relative;
-}
-.module h2 {
-  font-size: 24px;
-  text-align: center;
-  margin: 5px auto;
-}
 .error,
 .success {
   display: block;
