@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>TurnFortress2</title>
+		<link rel="stylesheet" type="text/css" href="/css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="/css/tf2.css" />
+		<!--jquery-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var height = $('#map').height()-95;
+        var width = $('#map').width();
+        
+
+        var q = 0;
+        while (q<8) {
+          var i = 0;
+          while (i<6) {
+            if (
+              (i==0 && q==0) ||
+              (i==5 && q==7)
+            ) {
+            }
+            else {
+              var hex = $('<div class="hex"></div>').appendTo('#map #hexContainer');
+              hex.css('top', 0-(34*i)+(11*q)); //29, 7
+              hex.css('left', 0+(94*q)+(72*i)); //58, 42
+              hex.css('z-index', 10-i);
+              hex.data('column', q);
+              hex.data('row', i);
+              hex.attr('rel', 'x'+q+'y'+i);
+              if (Math.floor(Math.random()*3) == 1) {
+  //if (false) {
+                var amnt = 18*(Math.floor(Math.random()*3));
+                hex.animate({
+                  top: '-='+amnt
+                },2000);
+              }
+            }
+            i++;
+          }
+          q++;
+        }
+
+        var randHex = function() {
+          var hex = Math.floor(Math.random()*50);
+          console.log(hex);
+          return hex;
+        }
+
+        
+        $($('.hex')[randHex()]).append('<div class="char spy"></div>');
+        $($('.hex')[randHex()]).append('<div class="char engineer"></div>');
+        $($('.hex')[randHex()]).append('<div class="char heavy"></div>');
+        $($('.hex')[randHex()]).append('<div class="char soldier"></div>');
+        $($('.hex')[randHex()]).append('<div class="char medic"></div>');
+        $($('.hex')[randHex()]).append('<div class="char pyro"></div>');
+        $($('.hex')[randHex()]).append('<div class="char demo"></div>');
+        $($('.hex')[randHex()]).append('<div class="char scout"></div>');
+        $($('.hex')[randHex()]).append('<div class="char sniper"></div>');
+        $($('.hex')[randHex()]).append('<div class="char sentry"></div>');
+        
+        $($('.hex')[randHex()]).append('<div class="char spy"></div>');
+        $($('.hex')[randHex()]).append('<div class="char engineer"></div>');
+        $($('.hex')[randHex()]).append('<div class="char heavy"></div>');
+        $($('.hex')[randHex()]).append('<div class="char soldier"></div>');
+        $($('.hex')[randHex()]).append('<div class="char medic"></div>');
+        $($('.hex')[randHex()]).append('<div class="char pyro"></div>');
+        $($('.hex')[randHex()]).append('<div class="char demo"></div>');
+        $($('.hex')[randHex()]).append('<div class="char scout"></div>');
+        $($('.hex')[randHex()]).append('<div class="char sniper"></div>');
+        $($('.hex')[randHex()]).append('<div class="char sentry"></div>');
+
+      });
+    </script>
+  </head>
+	<body>
+    <div id="map">
+        <div id="hexContainer">
+        
+        </div>
+        <div id="mask">
+        
+        </div>
+    </div> 
+    
+    <div class="character large">
+      <img src="images/characters/
+    </div>
+  </body>
+</html>
