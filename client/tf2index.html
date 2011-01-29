@@ -30,6 +30,7 @@
               hex.data('column', q);
               hex.data('row', i);
               hex.attr('rel', 'x'+q+'y'+i);
+              hex.text('x'+q+'y'+i);
               if (Math.floor(Math.random()*3) == 1) {
   //if (false) {
                 var amnt = 18*(Math.floor(Math.random()*3));
@@ -43,6 +44,7 @@
           q++;
         }
 
+        var i = 0;
         var randHex = function() {
           var hex = Math.floor(Math.random()*50);
           console.log(hex);
@@ -50,38 +52,75 @@
         }
 
         
-        $($('.hex')[randHex()]).append('<div class="char spy"></div>');
-        $($('.hex')[randHex()]).append('<div class="char engineer"></div>');
-        $($('.hex')[randHex()]).append('<div class="char heavy"></div>');
-        $($('.hex')[randHex()]).append('<div class="char soldier"></div>');
-        $($('.hex')[randHex()]).append('<div class="char medic"></div>');
-        $($('.hex')[randHex()]).append('<div class="char pyro"></div>');
-        $($('.hex')[randHex()]).append('<div class="char demo"></div>');
-        $($('.hex')[randHex()]).append('<div class="char scout"></div>');
-        $($('.hex')[randHex()]).append('<div class="char sniper"></div>');
-        $($('.hex')[randHex()]).append('<div class="char sentry"></div>');
+        $($('.hex')[randHex()]).append('<div class="char spy"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char engineer"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char heavy"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char soldier"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char medic"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char pyro"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char demo"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char scout"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char sniper"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char sentry"><div class="img"></div></div>');
         
-        $($('.hex')[randHex()]).append('<div class="char spy"></div>');
-        $($('.hex')[randHex()]).append('<div class="char engineer"></div>');
-        $($('.hex')[randHex()]).append('<div class="char heavy"></div>');
-        $($('.hex')[randHex()]).append('<div class="char soldier"></div>');
-        $($('.hex')[randHex()]).append('<div class="char medic"></div>');
-        $($('.hex')[randHex()]).append('<div class="char pyro"></div>');
-        $($('.hex')[randHex()]).append('<div class="char demo"></div>');
-        $($('.hex')[randHex()]).append('<div class="char scout"></div>');
-        $($('.hex')[randHex()]).append('<div class="char sniper"></div>');
-        $($('.hex')[randHex()]).append('<div class="char sentry"></div>');
+         $($('.hex')[randHex()]).append('<div class="char spy"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char engineer"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char heavy"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char soldier"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char medic"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char pyro"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char demo"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char scout"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char sniper"><div class="img"></div></div>');
+        $($('.hex')[randHex()]).append('<div class="char sentry"><div class="img"></div></div>');
 
+        $('.hex').each(function() {
+          var num = $(this).children().length;
+          $(this).addClass('chars'+num);
+        });
+        
+        $('.char').each(function() {
+          if (Math.floor(Math.random()*3) == 1) {
+            $(this).addClass('highlight');
+          }
+        });
+       
       });
     </script>
   </head>
 	<body>
+    <div id="playerchars">
+      <ul class="characters">
+        <li class="spythumb"></li>
+        <li class="sniperthumb"></li>
+        <li class="scoutthumb"></li>
+        <li class="medicthumb"></li>
+        <li class="heavythumb"></li>
+        <li class="engiethumb"></li>
+        <li class="demothumb"></li>
+        <li class="pyrothumb"></li>
+        <li class="soldierthumb"></li>
+        <li class="sentrythumb"></li>
+      </ul>
+      <ul class="characters">
+        <li class="spythumb"></li>
+        <li class="sniperthumb"></li>
+        <li class="scoutthumb"></li>
+        <li class="medicthumb"></li>
+        <li class="heavythumb"></li>
+        <li class="engiethumb"></li>
+        <li class="demothumb"></li>
+        <li class="pyrothumb"></li>
+        <li class="soldierthumb"></li>
+        <li class="sentrythumb"></li>
+      </ul>
+    </div>
     <div id="map">
         <div id="hexContainer">
         
         </div>
         <div id="mask">
-        
+       
         </div>
     </div> 
     

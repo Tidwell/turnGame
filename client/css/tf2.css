@@ -3,13 +3,69 @@ body {
   background: -moz-linear-gradient(top, #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%); /* firefox */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(12%,#595959), color-stop(25%,#666666), color-stop(39%,#474747), color-stop(50%,#2c2c2c), color-stop(51%,#000000), color-stop(60%,#111111), color-stop(76%,#2b2b2b), color-stop(91%,#1c1c1c), color-stop(100%,#131313)); /* webkit */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* ie */
-
+  height: 600px;
 }
+#playerchars {
+  height: 50px;
+  display: block;
+  margin: 5px auto;
+  width: 1000px;
+}
+
+#playerchars .characters{
+  height: 50px;
+  float: left;
+  clear: left;
+  overflow: hidden;
+}
+#playerchars  .characters  li {
+  width: 50px;
+  height: 50px;
+  float: left;
+  
+}
+
+
+#playerchars  .characters  li.spythumb {
+  background: url(/images/top_icons.png) no-repeat 0 0;
+}
+#playerchars  .characters  li.sniperthumb{
+  background: url(/images/top_icons.png) no-repeat -50px;
+}
+#playerchars  .characters  li.scoutthumb{
+  background: url(/images/top_icons.png) no-repeat -100px;
+}
+#playerchars  .characters  li.medicthumb{
+  background: url(/images/top_icons.png) no-repeat -150px;
+}
+#playerchars  .characters  li.heavythumb{
+  background: url(/images/top_icons.png) no-repeat -200px;
+}
+#playerchars  .characters  li.engiethumb{
+  background: url(/images/top_icons.png) no-repeat -250px;
+}
+#playerchars  .characters  li.demothumb{
+  background: url(/images/top_icons.png) no-repeat -300px;
+}
+#playerchars  .characters  li.pyrothumb{
+  background: url(/images/top_icons.png) no-repeat -350px;
+}
+#playerchars  .characters  li.soldierthumb{
+  background: url(/images/top_icons.png) no-repeat -400px;
+}
+#playerchars  .characters  li.sentrythumb{
+  background: url(/images/top_icons.png) no-repeat -450px;
+}
+
+
 #map {
   width: 990px;
   height: 400px;
   margin: 100px auto;
-  position: relative;
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  margin-left: -495px;
 }
 
 #map .hex {
@@ -26,58 +82,62 @@ body {
   top: 200px;
 }
 
-#map .char {
-   -moz-transform: scale(0.4);
-    background: url("/images/redtrans2.png") no-repeat scroll -13px 17px transparent;
+#map .char,
+#map .char .img {
     height: 300px;
+    width: 200px;
+}
+#map .char {
+   -moz-transform: scale(0.375);
     left: 0;
     position: absolute;
     top: -155px;
-    width: 107px;
     z-index: 999;
 }
-#map .char.engineer{
-  background: url("/images/redtrans2.png") no-repeat scroll -818px 20px transparent;
-  width: 130px;
-  left: -10px;
+#map .char.highlight {
+  background: url("/images/highlight.png") 0 10px no-repeat;
 }
-#map .char.heavy{
-   background: url("/images/redtrans2.png") no-repeat scroll -632px 20px transparent;
-    left: -33px;
-    width: 185px;
+#map .char.spy .img{
+  background: url("/images/redtrans2.png") no-repeat scroll -7px 3px transparent;
+}
+#map .char.sniper .img {
+ background: url("/images/redtrans2.png") no-repeat scroll -200px 10px transparent;
+}
+#map .char.scout .img {
+ background: url("/images/redtrans2.png") no-repeat scroll -400px 10px transparent;
+}
+#map .char.medic .img {
+   background: url("/images/redtrans2.png") no-repeat scroll -600px 10px transparent;
+}
+#map .char.heavy .img{
+   background: url("/images/redtrans2.png") no-repeat scroll -800px 10px transparent;
 }
 
-#map .char.medic {
-   background: url("/images/redtrans2.png") no-repeat scroll -505px 20px transparent;
-    width: 120px;
-}    
-#map .char.sniper {
- background: url("/images/redtrans2.png") no-repeat scroll -170px 17px transparent;
-    width: 140px;
-    left: -20px;
+#map .char.engineer .img{
+  background: url("/images/redtrans2.png") no-repeat scroll -1000px 10px transparent;
 }
-#map .char.pyro {
- background: url("/images/redtrans2.png") no-repeat scroll -1173px 25px transparent;
-    left: -20px;
-    width: 140px;
+#map .char.demo .img {
+ background: url("/images/redtrans2.png") no-repeat scroll -1200px 10px transparent;
+}  
+#map .char.pyro .img {
+ background: url("/images/redtrans2.png") no-repeat scroll -1400px 10px transparent;
 }
-#map .char.demo {
- background: url("/images/redtrans2.png") no-repeat scroll -974px 20px transparent;
-    width: 200px;
-    left: -40px;
+#map .char.soldier .img {
+ background: url("/images/redtrans2.png") no-repeat scroll -1600px 10px transparent;
 }
-#map .char.scout {
- background: url("/images/redtrans2.png") no-repeat scroll -328px 50px transparent;
-    left: -28px;
-    width: 164px;
+#map .char.sentry .img {
+background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transparent;
 }
-#map .char.soldier {
- background: url("/images/redtrans2.png") no-repeat scroll -1338px 20px transparent;
-    left: -28px;
-    width: 164px;
+
+#map .hex.chars1 .char {
+  top: -165px;
+  left: -60px}
+
+#map .hex.chars2 .char:nth-child(1) {
+  left: -33px;
+  top: -168px
 }
-#map .char.sentry {
-background: url("/images/redtrans2.png") no-repeat scroll -1495px 20px transparent;
-    left: -28px;
-    width: 164px;
+#map .hex.chars2 .char:nth-child(2) {
+  left: -81px;
+  top: -163px
 }
