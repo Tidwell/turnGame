@@ -13,21 +13,21 @@ body {
 }
 
 #playerchars .characters{
-  height: 50px;
+  height: 55px;
   float: left;
   clear: left;
   overflow: hidden;
 }
 #playerchars  .characters  li {
   width: 48px;
-  height: 50px;
+  height: 55px;
   float: left;
   
 }
 
 
 #playerchars  .characters  li.spythumb {
-  background: url(/images/top_icons.png) no-repeat 0 0;
+  background: url(/images/top_icons.png) no-repeat 0 5px;
 }
 #playerchars  .characters  li.sniperthumb{
   background: url(/images/top_icons.png) no-repeat -50px;
@@ -69,13 +69,61 @@ body {
 }
 
 #map .hex {
-  background: url(/images/hex2.png);
   width: 114px; 
   height: 157px; 
   position: absolute;
   top: 0px;
   left: 10px;
 }
+#map .hex._default {
+  background: url(/images/hexes/sand.png);
+}
+#map .hex.startRed {
+  background: url(/images/hexes/startred.png);
+}
+#map .hex.startBlue {
+  background: url(/images/hexes/startblue.png);
+}
+#map .hex.grass {
+  background: url(/images/hexes/grass.png);
+}
+#map .hex.cappoint {
+  background: url(/images/hexes/cappoint.png);
+}
+#map .hex.water {
+  background: url(/images/hexes/water.png);
+}
+#map .hex.waste {
+  background: url(/images/hexes/waste.png);
+}
+#map .hex.tiles {
+  background: url(/images/hexes/tiles.png);
+}
+#map .hex.sandbrack{
+  background: url(/images/hexes/sandbrack.png);
+}
+#map .hex.sand{
+  background: url(/images/hexes/sand.png);
+}
+#map .hex.whiteWood{
+  background: url(/images/hexes/whiteWood.png);
+}
+#map .hex.whiteWoodPlanks{
+  background: url(/images/hexes/whiteWoodPlanks.png);
+}
+#map .hex.concrete{
+  background: url(/images/hexes/concrete.png);
+}
+#map .hex.concreteRubble{
+  background: url(/images/hexes/concreteRubble.png);
+}
+#map .hex.concreteCracks{
+  background: url(/images/hexes/concreteCracks.png);
+}
+#map .hex.woodPlatform{
+  background: url(/images/hexes/woodPlatform.png);
+}
+
 #map #hexContainer {
   position: absolute;
   left: -72px;
@@ -140,4 +188,33 @@ background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transpare
 #map .hex.chars2 .char:nth-child(2) {
   left: -81px;
   top: -163px
+}
+
+#map .hex.chars3 .char:nth-child(1) {
+  left: -30px;
+  top: -169px
+}
+#map .hex.chars3 .char:nth-child(2) {
+  left: -72px;
+  top: -173px
+}
+#map .hex.chars3 .char:nth-child(3) {
+  left: -58px;
+  top: -152px
+}
+
+
+
+
+
+
+
+
+#map_editor {
+  position: absolute;
+  top: 20px;
+  right: 0px;
+  border: 2px solid;
+  padding: 5px;
+  background: #ccc;
 }

@@ -3,13 +3,13 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
-    special: 'splash',
+    longAttackDmg: 48,
+    specialType: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
     specialTargetRange: 1,
@@ -20,12 +20,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -37,12 +37,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -54,12 +54,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -71,12 +71,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -88,12 +88,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -105,12 +105,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -122,12 +122,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -139,12 +139,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',
@@ -156,12 +156,12 @@ exports = {
     health: 200,
     moveCost: 15, //ap
     dodgeCost: 15, //ap
-    meleCost: 10, //ap
+    meleeCost: 10, //ap
     meleeDmg: 32,
     shortAttackCost: 15, //ap
     shortAttackDmg: 96,
     longAttackCost: 10, //ap
-    longAttackDm: 48,
+    longAttackDmg: 48,
     special: 'splash',
     specialDmg: this.shortAttackDmg/2,
     specialTargetType: 'enemyUnit',

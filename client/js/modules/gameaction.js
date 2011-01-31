@@ -7,6 +7,7 @@ All DOM event bindings inside this object will be bound
 function gameaction(socket) {
   //to avoid this confusion
   var game = this;
+  this.map;
   this.mysocket = socket;
   
   this.gameShow = function() {
@@ -51,7 +52,6 @@ function gameaction(socket) {
   }
   
   this.gameOver = function(args) {
-    //console.log(args.winner.winner, this.mysocket.transport.sessionid);
     if (Number(this.mysocket.transport.sessionid) == args.winner) {
       modules.matchmaker.endGame('win');
     }
@@ -67,17 +67,20 @@ function gameaction(socket) {
         x: #
         y: #
         z: #
+        tileType: string, classname to give hex
       },
     ]
   }
   */
   this.renderMap = function(args) {
+  var i = 0;
+  $('.hex').remove();
     args.map.hexes.forEach(function(hex) {
       //create it
       var domHex = createHex(hex);
-      if (args.map.startRed.x == hex.x && args.map.startRed.y == hex.y) {
-        domHex.addClass('startRed');
-      }
+      
+      //args.map.hexes[i].domHex = domHex;
+
       //for some reason we will setTimeout this.  It will need to be
       //use the animation queue eventually...
       setTimeout(function() {
@@ -86,12 +89,18 @@ function gameaction(socket) {
           var amnt = 18*(hex.z);
           $(domHex).animate({
              top: '-='+amnt
-          },1000);
+          },100);
         }
-      }, 3000);
-
+      }, 500);
+      i++;
     });
+    this.map = args.map;
+
+    $('#map_editor').find('textarea').val($.toJSON(game.map));
     finish();
+    if ($('input[type=checkbox]:checked').length > 0) {
+      $('.char').hide();
+    }
   }
   var createHex = function(obj) {
     var q = obj.x;
@@ -103,7 +112,8 @@ function gameaction(socket) {
     hex.data('column', q);
     hex.data('row', i);
     hex.attr('rel', 'x'+q+'y'+i);
-    hex.text('x'+q+'y'+i);
+    hex.text('x'+q+'y'+i+'z'+obj.z);
+    hex.addClass(obj.tileType);
     return hex;
   }
   
@@ -154,18 +164,101 @@ function gameaction(socket) {
   
   
   
+  var editor = $('#map_editor');
+  editor.find('input[type=checkbox]').change(function() {
+    $('.char').toggle();
+  })
+  $('.reset').click(function() {
+    if (confirm('Are you sure you want to reset the board to 1-height?')) {
+      var i = 0;
+      $(game.map.hexes).each(function(hex) {
+        game.map.hexes[i].z = 1;
+        i++;
+      });
+      game.renderMap({map: game.map});
+    }
+  });
+  
+  editor.find('button.load').show().click(function() {
+    var newMap = editor.find('textarea').val();
+    if ($.parseJSON(newMap)) {
+      game.map = $.parseJSON(newMap);
+      game.renderMap({map: game.map});
+    }
+  });
+  
+  editor.find('button.remove').click(function() {
+    if (!selectedHex) return;
+    var hex = getHexFromRel($(selectedHex).attr('rel'));
+    var i = 0;
+    $(game.map.hexes).each(function() {
+      if (hex.x == this.x && hex.y == this.y) {
+        game.map.hexes.remove(i);
+      }
+      i++;
+    });
+    game.renderMap({map: game.map});
+  })
+  
+  var selectedHex;
+  $('.hex').live('click', function() {
+    editor.find('.selected span').html($(this).attr('rel'));
+    selectedHex = $(this);
+    var hex = getHexFromRel($(selectedHex).attr('rel'));
+    editor.find('option').each(function() {
+      $(this).attr('selected', '');
+      if ($(this).val() == hex.tileType) {
+        $(this).attr('selected', 'selected');
+      }
+    });
+  });
+  
+  editor.find('select').change(function() {
+    if (!selectedHex) return;
+    var hex = getHexFromRel($(selectedHex).attr('rel'));
+    hex.tileType = $(this).val();
+    game.renderMap({map: game.map});
+  });
+  
+  editor.find('button').show().click(function() {
+    if (!selectedHex) return;
+    var delta = undefined;
+    if ($(this).hasClass('up')) {
+      delta = 1;
+    }
+    else if ($(this).hasClass('down')) {
+      delta = -1;
+    }
+    if (typeof delta === 'number') {
+      var hex = getHexFromRel($(selectedHex).attr('rel'));
+      hex.z = hex.z+delta;
+      game.renderMap({map: game.map});
+    }
+  });
+
+
+  function getHexFromRel(rel) {
+    var i = 0;
+    var toReturn;
+    $(game.map.hexes).each(function() {
+      var thisRel = 'x'+this.x+'y'+this.y;
+      if (rel == thisRel) {
+        toReturn = game.map.hexes[i]
+      }
+      i++;
+    });
+    return toReturn;
+  }
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+// Array Remove - By John Resig (MIT Licensed)
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+}; 
   
   
   

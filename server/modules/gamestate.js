@@ -59,24 +59,30 @@ function gamestate(eventEmitter) {
       var i = 0;
       while (i<6) {
         if ((i==0 && q==0) ||
-            (i==5 && q==7)) {
+            (i==5 && q==7) 
+           ) {
         }
         else {
           var z = Math.floor(Math.random()*3);
+          var tileType = '_default';
+          if (i==1 && q==0) tileType = 'startRed';
+          if (i==4 && q==7) tileType = 'startBlue';
           map.hexes.push({
             x: q,
             y: i,
-            z: (Math.floor(Math.random()*3) == 1) ? z : 0 
+            z: (Math.floor(Math.random()*3) == 1) ? ((z==1) ? 1 : 1): 1,
+            tileType: tileType
+            
           })
         }
         i++;
       }
       q++;    
     }
-    map.startRed = {x: 0, y: 1}
     this.map = map;
     this.sendAllPlayers({type: 'renderMap', args: {map: this.map}}, obj.socket); 
   }
+  
   
   this.beginGame = function(socket) {
     this.activePlayer = this.players[Math.floor(Math.random()*this.maxPlayers)];
