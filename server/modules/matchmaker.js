@@ -3,6 +3,7 @@ Module for handling matchmaking
 */
 
 //add our require paths to the require array
+require.paths.unshift('game/');
 
 //assignment/loading
 var 
