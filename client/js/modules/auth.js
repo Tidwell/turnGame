@@ -7,7 +7,7 @@ All DOM event bindings inside this object will be bound
 //create our object that is shared with the server
 var isValidName = new isValidName;
 
-function auth(socket) {
+function auth() {
   //to avoid this confusion
   var auth = this;
  
@@ -58,3 +58,5 @@ function auth(socket) {
     return false;
   });
 }
+
+modules.auth = new auth;

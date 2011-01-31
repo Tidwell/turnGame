@@ -4,11 +4,10 @@ A new instance of this object is created when the module is loaded
 All DOM event bindings inside this object will be bound
 */
 
-function gameaction(socket) {
+function gameaction() {
   //to avoid this confusion
   var game = this;
   this.map;
-  this.mysocket = socket;
   
   this.gameShow = function() {
     $('#gamestate').fadeIn();
@@ -17,14 +16,9 @@ function gameaction(socket) {
   /*
   *Called when a new game has begun
   *@arg     args           the arguments the server sent with the message
-  *             .players   the players in the game
   */
   this.gameStart = function(args) {
-    $('#gamestate ul.players li').remove();
-    //add the new player info
-    args.players.forEach(function(player) {
-      $('#gamestate ul.players').append('<li rel="'+player+'">'+player+'</li>');
-    });
+
   }
 
   /*
@@ -34,10 +28,9 @@ function gameaction(socket) {
   */
   
   this.playerNames = function(args) {
-    var i = 0;
-    $('#gamestate ul.players li').each(function() {
-      $(this).html(args.players[i]);
-      i++;
+   $('#gamestate ul.players li').remove();
+   $(args.players).each(function() {
+      $('#gamestate ul.players').append('<li rel="'+this.sessionId+'">'+this.name+'</li>');
     });
   }
   
@@ -48,11 +41,11 @@ function gameaction(socket) {
   */
   this.activePlayer = function(args) {
     $('#gamestate ul.players li').removeClass('active');
-    $('#gamestate ul.players li[rel='+args.player+']').addClass('active');
+    $('#gamestate ul.players li[rel='+args.player.sessionId+']').addClass('active');
   }
   
   this.gameOver = function(args) {
-    if (Number(this.mysocket.transport.sessionid) == args.winner) {
+    if (Number(socket.transport.sessionid) == args.winner.sessionId) {
       modules.matchmaker.endGame('win');
     }
     else {
@@ -102,22 +95,24 @@ function gameaction(socket) {
       $('.char').hide();
     }
   }
-  var createHex = function(obj) {
-    var q = obj.x;
-    var i = obj.y;
-    var hex = $('<div class="hex"></div>').appendTo('#map #hexContainer');
-    hex.css('top', 0-(34*i)+(11*q)); //29, 7
-    hex.css('left', 0+(94*q)+(72*i)); //58, 42
-    hex.css('z-index', 10-i);
-    hex.data('column', q);
-    hex.data('row', i);
-    hex.attr('rel', 'x'+q+'y'+i);
-    hex.text('x'+q+'y'+i+'z'+obj.z);
-    hex.addClass(obj.tileType);
-    return hex;
+  var createHex = function(hex) {
+    var q = hex.x;
+    var i = hex.y;
+    var domHex = $('<div class="hex"></div>').appendTo('#map #hexContainer');
+    domHex.css('top', 0-(34*i)+(11*q));
+    domHex.css('left', 0+(94*q)+(72*i));
+    domHex.css('z-index', 10-i);
+    domHex.data('column', q);
+    domHex.data('row', i);
+    domHex.attr('rel', 'x'+q+'y'+i);
+    domHex.text('x'+q+'y'+i+'z'+hex.z);
+    domHex.addClass(hex.tileType);
+    return domHex;
   }
   
-  
+  this.characters = function(args) {
+    console.log(args);
+  }
   
   function finish() {
   var i = 0;
@@ -249,17 +244,13 @@ function gameaction(socket) {
     });
     return toReturn;
   }
-  
-  
-  
+
+}
 
 // Array Remove - By John Resig (MIT Licensed)
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
   this.length = from < 0 ? this.length + from : from;
   return this.push.apply(this, rest);
-}; 
-  
-  
-  
-}
+};
+modules.gameaction = new gameaction;

@@ -14,7 +14,7 @@ function Gamestate() {
   
   //returns the players in the game 
   this.getPlayers = function() {
-    return this.players;
+    return this.players; 
   }
   
   //Sends a message to all players in a game
@@ -22,15 +22,15 @@ function Gamestate() {
 	//Sends the object to the clients via the socket
 	this.sendAllPlayers = function(obj, socket) {
     this.players.forEach(function(player) {
-			socket.clients[player].send(obj);
+			socket.clients[player.sessionId].send(obj);
 		});
 	}
 	
 	//Sends a message to a single player in a game
 	//accepts an object and the players sessionId, and a socket
 	//Sends the object to the client via the socket
-	this.sendToPlayer = function(obj, id, socket) {
-		socket.clients[id].send(obj);
+	this.sendToPlayer = function(obj, player, socket) {
+		socket.clients[player.sessionId].send(obj);
 	}
   
   //sends a game over event to the players and sends out the event
@@ -49,7 +49,7 @@ function Gamestate() {
   */
   this.addPlayer = function(obj) {
     //add the player to the game
-    this.players.push(obj.client.sessionId);
+    this.players.push({sessionId: obj.client.sessionId});
     //if the game has 2 players in it
     if (this.players.length == this.maxPlayers) {
       this.startGame(obj)

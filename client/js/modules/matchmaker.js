@@ -4,7 +4,7 @@ A new instance of this object is created when the module is loaded
 All DOM event bindings inside this object will be bound
 */
 
-function matchmaker(socket) {
+function matchmaker() {
   //to avoid this confusion
   var auth = this;
   
@@ -35,3 +35,5 @@ function matchmaker(socket) {
     $('#matchmaker .loading').fadeIn();
   });
 }
+
+modules.matchmaker = new matchmaker
