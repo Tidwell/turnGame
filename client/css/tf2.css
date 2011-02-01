@@ -19,10 +19,16 @@ body {
   overflow: hidden;
 }
 #playerchars  .characters  li {
-  width: 48px;
+  width: 46px;
   height: 55px;
   float: left;
   
+}
+#players .blue {
+  border: 1px solid blue;
+}
+#players .red {
+  border: 1px solid red;
 }
 
 
@@ -63,7 +69,7 @@ body {
   height: 400px;
   margin: 100px auto;
   position: absolute;
-  top: 35px;
+  top: 75px;
   left: 50%;
   margin-left: -495px;
 }
@@ -76,7 +82,7 @@ body {
   left: 10px;
 }
 #map .hex._default {
-  background: url(/images/hexes/sand.png);
+  background: url(/images/hexes/default.png);
 }
 #map .hex.startRed {
   background: url(/images/hexes/startred.png);
@@ -177,6 +183,10 @@ body {
 background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transparent;
 }
 
+#map div.char.blueTeam .img {
+  background-image: url("/images/bluetrans2.png");
+}
+
 #map .hex.chars1 .char {
   top: -165px;
   left: -60px}
@@ -204,6 +214,35 @@ background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transpare
 }
 
 
+#map .hex.chars4plus .char {
+  display: none;
+}
+#map .hex.chars4plus .char:nth-child(1) {
+  left: -30px;
+  top: -169px;
+  display: block;
+}
+#map .hex.chars4plus .char:nth-child(2) {
+  left: -72px;
+  top: -173px;
+  display: block;
+}
+#map .hex.chars4plus .char:nth-child(3) {
+  left: -58px;
+  top: -152px;
+  display: block;
+}
+#map .hex.chars4plus .more {
+    -moz-transform: scale(0.8);
+    background: url("/images/more.png") no-repeat scroll 0 0 transparent;
+    bottom: 110px;
+    height: 30px;
+    left: 50px;
+    position: absolute;
+    text-align: right;
+    width: 30px;
+    z-index: 2000;
+}
 
 
 

@@ -5,13 +5,16 @@ require.paths.unshift('system/');
 
 var 
   log = require('logging'),
-  characters = require('characters')
+  characters = require('characters'),
+  maps = require('maps.js');
+  
 function gamestate(eventEmitter) {
   this.eventEmitter = eventEmitter;
-  this.maxPlayers = 1;
+  this.maxPlayers = 2;
   this.activePlayer = 0;
   this.players = [];
   this.map;
+  this.spawnPoints = {blue: undefined, red: undefined};
 }
 
 //set the inheratance to the system gamestate
@@ -32,13 +35,16 @@ gamestate.prototype = require('Gamestate').Gamestate;
 gamestate.prototype.startGame = function(obj) {
   //tell the players the game begins
   this.sendAllPlayers({type: 'gameStart', args: {}}, obj.socket);
+  var i = 0;
   this.players.forEach(function(player) {
     //determine the players name or set it to a default if they don't have one
     var name = (obj.connectedUsers[player.sessionId].name) ? obj.connectedUsers[player.sessionId].name : 'Anonymous'
     player.name = name;
+    player.color = (i===0) ? 'red' : 'blue';
+    i++;
   });
   //tell both players the player names
-  this.sendAllPlayers({type: 'playerNames', args: {players: this.players}}, obj.socket);
+  this.sendAllPlayers({type: 'playerInfo', args: {players: this.players}}, obj.socket);
   //make the map
   this.makeMap(obj);
   this.addCharacters(obj); 
@@ -58,26 +64,52 @@ gamestate.prototype.startGame = function(obj) {
 */
 
 gamestate.prototype.addCharacters = function(obj) {
+  var game = this;
   this.players.forEach(function(player) {
+    var chars = new characters;
     player.characters = [  
-      characters.spy,
-      characters.sniper,
-      characters.scout,
-      characters.medic,
-      characters.heavy,
-      characters.engineer,
-      characters.demo,
-      characters.pyro,
-      characters.soldier
-    ]
+      chars.spy,
+      chars.sniper,
+      chars.scout,
+      chars.medic,
+      chars.heavy,
+      chars.engineer,
+      chars.demo,
+      chars.pyro,
+      chars.soldier
+    ];
+    var x = game.getSpawn(player.color).x;
+    var y = game.getSpawn(player.color).y;
+    var i = 0;
+    var len = player.characters.length;
+    while (i<len) {
+      player.characters[i].color = player.color;
+      player.characters[i].position.x = x;
+      player.characters[i].position.y = y;
+      i++;
+    }
   });
-  this.sendAllPlayers({type: 'characters', args: {players: this.players}}, obj.socket);
+  this.sendAllPlayers({type: 'characters', args: {players: game.players}}, obj.socket);
+} 
+
+//accepts a string color 'blue' or 'red'
+//returns & caches (this.spawnPoints[color])
+//the last instance in the map array matching the tileType of {color}start
+gamestate.prototype.getSpawn = function(color) {
+  var spawnPoint;
+  this.map.hexes.forEach(function(hex) {
+    var tileType = hex.tileType;
+    if (tileType.toLowerCase() == 'start'+color) {
+      spawnPoint = hex;
+    }
+  });
+  return spawnPoint;
 }
 
  /*
 * Called at the start of the game
 * Makes a map all at height 1 with blue/red starts at each side
-* 
+*  
 *
 *@arg obj.
 *         client         client object
@@ -113,6 +145,7 @@ gamestate.prototype.makeMap = function(obj) {
     q++;    
   }
   this.map = map;
+  this.map = maps.onefort;
   this.sendAllPlayers({type: 'renderMap', args: {map: this.map}}, obj.socket); 
 }
 

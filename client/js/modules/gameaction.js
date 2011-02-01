@@ -27,10 +27,10 @@ function gameaction() {
   *             .players   names of players in the game
   */
   
-  this.playerNames = function(args) {
+  this.playerInfo = function(args) {
    $('#gamestate ul.players li').remove();
    $(args.players).each(function() {
-      $('#gamestate ul.players').append('<li rel="'+this.sessionId+'">'+this.name+'</li>');
+      $('#gamestate ul.players').append('<li rel="'+this.sessionId+'" class="'+this.color+'">'+this.name+'</li>');
     });
   }
   
@@ -90,7 +90,6 @@ function gameaction() {
     this.map = args.map;
 
     $('#map_editor').find('textarea').val($.toJSON(game.map));
-    finish();
     if ($('input[type=checkbox]:checked').length > 0) {
       $('.char').hide();
     }
@@ -110,53 +109,48 @@ function gameaction() {
     return domHex;
   }
   
+  
   this.characters = function(args) {
-    console.log(args);
+    $('.char').remove();
+    $('.hex').removeClass('chars1').removeClass('chars2').removeClass('chars3').removeClass('chars4plus');
+    $(args.players).each(function() {
+      var player = this;
+      $(this.characters).each(function() {
+        var character = this;
+          $('.hex[rel=x'+character.position.x+'y'+character.position.y+']')
+            .append('<div class="char '+character.name+' '+character.color+'Team"><div class="img"></div></div>');
+      })
+    });
+    
+    $('.hex').each(function() {
+      //get the class to append
+      var num = $(this).children('.char').length;
+      if (num > 0) {
+        num = (num>3) ? 'chars4plus'  : 'chars'+num;
+        $(this).addClass(num);
+        //if its more than 3 append the more class
+        if (num == 'chars4plus') {
+          $(this).append('<div class="more"></div>');
+          if (
+            $(this).children('.chars').hasClass('blueTeam') &&
+            $(this).children('.chars').hasClass('redTeam')
+            ) {
+              console.log('rearange');
+            }
+        }
+      }
+    });
+    //console.log(args);
   }
   
-  function finish() {
-  var i = 0;
-  var randHex = function() {
-    var hex = Math.floor(Math.random()*50);
-    return hex;
-  }
 
-  
-  $($('.hex')[randHex()]).append('<div class="char spy"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char engineer"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char heavy"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char soldier"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char medic"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char pyro"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char demo"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char scout"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char sniper"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char sentry"><div class="img"></div></div>');
-  
-   $($('.hex')[randHex()]).append('<div class="char spy"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char engineer"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char heavy"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char soldier"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char medic"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char pyro"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char demo"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char scout"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char sniper"><div class="img"></div></div>');
-  $($('.hex')[randHex()]).append('<div class="char sentry"><div class="img"></div></div>');
-
-  $('.hex').each(function() {
-    var num = $(this).children().length;
-    $(this).addClass('chars'+num);
-  });
-  
-  $('.char').each(function() {
-    if (Math.floor(Math.random()*3) == 1) {
-      $(this).addClass('highlight');
-    }
-  });
- }
-  
-  
+    
+/*    $('.char').each(function() {
+      if (Math.floor(Math.random()*3) == 1) {
+        $(this).addClass('highlight');
+      }
+    });
+*/
   
   
   var editor = $('#map_editor');
