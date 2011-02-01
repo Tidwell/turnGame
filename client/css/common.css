@@ -42,25 +42,6 @@ img.loading {
   width: 180px;
 }
 
-#gamestate li {
-  padding: 2px;
-  margin: 1px;
-}
-
-#gamestate table {
-  border: 0;
-  background: url(/images/gameboard.png);
-}
-#gamestate tr {
-  height: 100px;
-}
-#gamestate td {
-  width: 100px;
-  text-align: center;
-  font-size: 100px;
-  line-height: 100px;
-}
-
 #matchmaker h3 {
   text-align: center;
   margin: 10px auto;

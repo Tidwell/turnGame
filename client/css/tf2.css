@@ -14,14 +14,19 @@ body {
 
 #playerchars .characters{
   height: 55px;
-  float: left;
-  clear: left;
+  margin: 0 auto;
   overflow: hidden;
+  width: 1000px;
 }
-#playerchars  .characters  li {
-  width: 46px;
+#playerchars  .characters  li  {
+   float: left;
+  margin: 0;
+  text-align: right;
+}
+#playerchars  .characters  li .img{
+  width: 50px;
   height: 55px;
-  float: left;
+  float: right;
   
 }
 #players .blue {
@@ -32,37 +37,52 @@ body {
 }
 
 
-#playerchars  .characters  li.spythumb {
-  background: url(/images/top_icons.png) no-repeat 0 5px;
+#playerchars  .characters  li.spythumb .img{
+  background: url(/images/top_icons.png) no-repeat 0 1px;
 }
-#playerchars  .characters  li.sniperthumb{
-  background: url(/images/top_icons.png) no-repeat -50px;
+#playerchars  .characters  li.sniperthumb .img{
+  background: url(/images/top_icons.png) no-repeat -50px 0;
 }
-#playerchars  .characters  li.scoutthumb{
-  background: url(/images/top_icons.png) no-repeat -100px;
+#playerchars  .characters  li.scoutthumb .img{
+  background: url(/images/top_icons.png) no-repeat -100px 0;
 }
-#playerchars  .characters  li.medicthumb{
-  background: url(/images/top_icons.png) no-repeat -150px;
+#playerchars  .characters  li.medicthumb .img{
+  background: url(/images/top_icons.png) no-repeat -150px 0;
 }
-#playerchars  .characters  li.heavythumb{
-  background: url(/images/top_icons.png) no-repeat -200px;
+#playerchars  .characters  li.heavythumb .img{
+  background: url(/images/top_icons.png) no-repeat -200px 0;
 }
-#playerchars  .characters  li.engiethumb{
-  background: url(/images/top_icons.png) no-repeat -250px;
+#playerchars  .characters  li.engiethumb .img{
+  background: url(/images/top_icons.png) no-repeat -250px 0;
 }
-#playerchars  .characters  li.demothumb{
-  background: url(/images/top_icons.png) no-repeat -300px;
+#playerchars  .characters  li.demothumb .img{
+  background: url(/images/top_icons.png) no-repeat -300px 0;
 }
-#playerchars  .characters  li.pyrothumb{
-  background: url(/images/top_icons.png) no-repeat -350px;
+#playerchars  .characters  li.pyrothumb .img{
+  background: url(/images/top_icons.png) no-repeat -350px 0;
 }
-#playerchars  .characters  li.soldierthumb{
-  background: url(/images/top_icons.png) no-repeat -400px;
+#playerchars  .characters  li.soldierthumb .img{
+  background: url(/images/top_icons.png) no-repeat -400px 0;
 }
-#playerchars  .characters  li.sentrythumb{
-  background: url(/images/top_icons.png) no-repeat -450px;
+#playerchars  .characters  li.sentrythumb .img{
+  background: url(/images/top_icons.png) no-repeat -450px 0;
 }
 
+#playerchars .characters {
+  background: url(/images/redhealth.png) repeat-x; 
+}
+
+#playerchars li {
+  height: 50px;
+  background: url(/images/greenhealth.png) repeat-x; 
+}
+#playerchars li span{
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  padding-top: 5px;
+  text-indent: 2px;
+}
 
 #map {
   width: 990px;
@@ -256,4 +276,6 @@ background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transpare
   border: 2px solid;
   padding: 5px;
   background: #ccc;
+  width: 325px;
+  z-index: 99999;
 }

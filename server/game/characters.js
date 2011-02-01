@@ -96,7 +96,7 @@ function characters(){
       text: '{short range} does half damage to all opponents in same or neighboring hex as target'
     },
     engineer: {
-      name: 'engineer',
+      name: 'engie',
       position: {x: 0, y: 0},
       health: 200,
       moveCost: 15, //ap

@@ -8,6 +8,7 @@ function gameaction() {
   //to avoid this confusion
   var game = this;
   this.map;
+  this.players;
   
   this.gameShow = function() {
     $('#gamestate').fadeIn();
@@ -18,7 +19,8 @@ function gameaction() {
   *@arg     args           the arguments the server sent with the message
   */
   this.gameStart = function(args) {
-
+    $('.characters li span, .characters li .img').remove();
+    $('.characters li').append('<span></span><div class="img"></div>');
   }
 
   /*
@@ -113,13 +115,17 @@ function gameaction() {
   this.characters = function(args) {
     $('.char').remove();
     $('.hex').removeClass('chars1').removeClass('chars2').removeClass('chars3').removeClass('chars4plus');
+    this.players = args.players;
     $(args.players).each(function() {
       var player = this;
+      var totalHealth = 0;
       $(this.characters).each(function() {
         var character = this;
+        totalHealth += Math.floor(character.health/2);
           $('.hex[rel=x'+character.position.x+'y'+character.position.y+']')
             .append('<div class="char '+character.name+' '+character.color+'Team"><div class="img"></div></div>');
       })
+      //$('.characters.'+player.color).width(totalHealth);
     });
     
     $('.hex').each(function() {
@@ -140,10 +146,20 @@ function gameaction() {
         }
       }
     });
+    this.renderHealth();
     //console.log(args);
   }
   
-
+  this.renderHealth = function() {
+    $(this.players).each(function() {
+      var player = this;
+      $('.characters.'+player.color+' li').hide();
+      $(this.characters).each(function() {
+        var character = this;
+        $('.characters.'+player.color+' .'+character.name+'thumb').show().width(Math.floor(character.health/2)).find('span').html(character.health);
+      });
+    });
+  }
     
 /*    $('.char').each(function() {
       if (Math.floor(Math.random()*3) == 1) {
@@ -189,6 +205,7 @@ function gameaction() {
     game.renderMap({map: game.map});
   })
   
+  editor.draggable();
   var selectedHex;
   $('.hex').live('click', function() {
     editor.find('.selected span').html($(this).attr('rel'));
