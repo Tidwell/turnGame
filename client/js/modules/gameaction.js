@@ -48,7 +48,7 @@ function gameaction() {
     $('#gamestate ul.players li').removeClass('active');
     $('#gamestate ul.players li[rel='+args.player.sessionId+']').addClass('active');
     if (args.player.sessionId == myId) {
-      alert('Click a hex to move a character to another random hex');
+      alert('Click a hex to move a random '+args.player.color+' character matching one of the types of characters in the hex');
       $('.hex').unbind().click(function() {
         var chars = $(this).children('.char');
         var toRel = $($('.hex')[Math.floor(Math.random()*($('.hex').length-1))]).attr('rel');
