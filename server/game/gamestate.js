@@ -41,6 +41,7 @@ gamestate.prototype.startGame = function(obj) {
     var name = (obj.connectedUsers[player.sessionId].name) ? obj.connectedUsers[player.sessionId].name : 'Anonymous'
     player.name = name;
     player.color = (i===0) ? 'red' : 'blue';
+    player.ap = 0;
     i++;
   });
   //tell both players the player names
@@ -151,6 +152,49 @@ gamestate.prototype.makeMap = function(obj) {
 
 gamestate.prototype.checkGameEnd = function() {
   return false;
+}
+
+gamestate.prototype.move = function(obj) {
+  if (obj.client.sessionId != this.activePlayer.sessionId) {
+    this.sendPlayer({type: 'notYourTurn'}, obj.client.sessionId,obj.socket);
+  }
+  var characterName = obj.args.character;
+  var to = obj.args.to;
+  var player = this.getPlayerBySessionId(obj.client.sessionId);
+  var character = this.getCharacter(player, characterName);
+  character.position.x = to.x;
+  character.position.y = to.y;
+  this.sendAllPlayers({type: 'move', args: character}, obj.socket);
+  this.rotateActive(obj);
+}
+
+gamestate.prototype.rotateActive = function(obj) {
+  var game = this;
+  var i = 0;
+  var set = false;
+  game.players.forEach(function(player) {
+    if (game.activePlayer.sessionId == player.sessionId && set == false) {
+      set = true;
+      if (i == 0) {
+        game.activePlayer = game.players[1];
+      }
+      else {
+        game.activePlayer = game.players[0];
+      }
+    }
+    i++;
+  });
+  game.sendAllPlayers({type: 'activePlayer', args: {player: game.activePlayer}}, obj.socket);
+}
+
+gamestate.prototype.getCharacter = function(player, name) {
+  var toReturn;
+  player.characters.forEach(function(character) {
+    if (character.name == name) {
+      toReturn = character;
+    }
+  });
+  return toReturn;
 }
 
 module.exports = gamestate

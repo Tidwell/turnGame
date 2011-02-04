@@ -12,7 +12,7 @@ function gameaction() {
   *@arg eventEmitter    the event emitter object to attach events to
   */
   this.listen = function(eventEmitter) {
-    eventEmitter.on('placeLetter', this.placeLetter);
+    eventEmitter.on('move', this.move);
   }
   
 /*
@@ -27,12 +27,11 @@ function gameaction() {
   *         connectedUsers object of connected users, indexed by session id
   *         games          array of all games
   */
-  this.placeLetter = function(obj) {
+  this.move = function(obj) {
     //get the specific game object this is intended for
     var targetGame;
-    var i = 0;
     var targetGame = getGameIndex(obj);
-    obj.games[targetGame].placeLetter(obj);
+    obj.games[targetGame].move(obj);
   }
 
   
@@ -48,9 +47,10 @@ function gameaction() {
   *         games          array of all games
   */
   var getGameIndex = function(obj) {
+    var i = 0;
     obj.games.forEach(function(game) {
       game.players.forEach(function(player) {
-        if (player == obj.client.sessionId) {
+        if (player.sessionId == obj.client.sessionId) {
           targetGame = i;
         }
       });

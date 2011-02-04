@@ -7,6 +7,8 @@ All DOM event bindings inside this object will be bound
 function gameaction() {
   //to avoid this confusion
   var game = this;
+  var myId;
+  
   this.map;
   this.players;
   
@@ -21,6 +23,7 @@ function gameaction() {
   this.gameStart = function(args) {
     $('.characters li span, .characters li .img').remove();
     $('.characters li').append('<span></span><div class="img"></div>');
+    myId = socket.transport.sessionid;
   }
 
   /*
@@ -44,6 +47,31 @@ function gameaction() {
   this.activePlayer = function(args) {
     $('#gamestate ul.players li').removeClass('active');
     $('#gamestate ul.players li[rel='+args.player.sessionId+']').addClass('active');
+    if (args.player.sessionId == myId) {
+      alert('Click a hex to move a character to another random hex');
+      $('.hex').unbind().click(function() {
+        var chars = $(this).children('.char');
+        var toRel = $($('.hex')[Math.floor(Math.random()*($('.hex').length-1))]).attr('rel');
+        if (toRel) {
+          var to = {
+            x: undefined,
+            y: undefined
+          };
+          toRel = toRel.split('y');
+          toRel[0] = toRel[0].replace('x','');
+          to.x = toRel[0];
+          to.y = toRel[1];
+        }
+        var character = $(chars[Math.floor(Math.random()*(chars.length-1))]).attr('rel');
+        if (character && to.x && to.y) {
+          socket.send({type: 'move', args: {
+            character: character,
+            to: to
+          }});
+          $('.hex').unbind();
+        }
+      });
+    }
   }
   
   this.gameOver = function(args) {
@@ -111,23 +139,8 @@ function gameaction() {
     return domHex;
   }
   
-  
-  this.characters = function(args) {
-    $('.char').remove();
+  this.charClasses = function() {
     $('.hex').removeClass('chars1').removeClass('chars2').removeClass('chars3').removeClass('chars4plus');
-    this.players = args.players;
-    $(args.players).each(function() {
-      var player = this;
-      var totalHealth = 0;
-      $(this.characters).each(function() {
-        var character = this;
-        totalHealth += Math.floor(character.health/2);
-          $('.hex[rel=x'+character.position.x+'y'+character.position.y+']')
-            .append('<div class="char '+character.name+' '+character.color+'Team"><div class="img"></div></div>');
-      })
-      //$('.characters.'+player.color).width(totalHealth);
-    });
-    
     $('.hex').each(function() {
       //get the class to append
       var num = $(this).children('.char').length;
@@ -146,6 +159,23 @@ function gameaction() {
         }
       }
     });
+  }
+  
+  this.characters = function(args) {
+    $('.char').remove();
+    this.players = args.players;
+    $(args.players).each(function() {
+      var player = this;
+      var totalHealth = 0;
+      $(this.characters).each(function() {
+        var character = this;
+        totalHealth += Math.floor(character.health/2);
+          $('.hex[rel=x'+character.position.x+'y'+character.position.y+']')
+            .append('<div rel="'+character.name+'" class="char '+character.name+' '+character.color+'Team"><div class="img"></div></div>');
+      })
+      //$('.characters.'+player.color).width(totalHealth);
+    });
+    this.charClasses();
     this.renderHealth();
     //console.log(args);
   }
@@ -159,6 +189,18 @@ function gameaction() {
         $('.characters.'+player.color+' .'+character.name+'thumb').show().width(Math.floor(character.health/2)).find('span').html(character.health);
       });
     });
+  }
+  
+  this.move = function(character) {
+    var hex = $('.hex[rel=x'+character.position.x+'y'+character.position.y+']');
+    var sel = '.'+character.color+'Team.'+character.name;
+    var character = $(sel);
+    character.appendTo(hex);
+    this.charClasses();
+  }
+  
+  this.notYourTurn = function(args) {
+    alert('Its not your turn');
   }
     
 /*    $('.char').each(function() {

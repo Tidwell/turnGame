@@ -25,12 +25,25 @@ function Gamestate() {
 			socket.clients[player.sessionId].send(obj);
 		});
 	}
+  
+  this.getPlayerBySessionId = function(sessionId) {
+    var returnPlayer;
+    this.players.forEach(function(player) {
+      if (player.sessionId == sessionId) {
+        returnPlayer = player;
+      }
+    });
+    return returnPlayer;
+  }
 	
 	//Sends a message to a single player in a game
 	//accepts an object and the players sessionId, and a socket
 	//Sends the object to the client via the socket
-	this.sendToPlayer = function(obj, player, socket) {
-		socket.clients[player.sessionId].send(obj);
+	this.sendPlayer = function(obj, player, socket) {
+		if (typeof player != 'object') {
+      player = this.getPlayerBySessionId(player);
+    }
+    socket.clients[player.sessionId].send(obj);
 	}
   
   //sends a game over event to the players and sends out the event
