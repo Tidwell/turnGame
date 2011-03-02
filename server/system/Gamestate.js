@@ -68,15 +68,6 @@ function Gamestate() {
       this.startGame(obj)
     }
   }
-  
-  /* REQUIRED ON EVERY MODULE
-  *Called when the module is loaded, sets up event listeners
-  *@arg eventEmitter    the event emitter object to attach events to
-  */
-  this.listen = function(eventEmitter) {
-
-  }
-
 }
 
 exports.Gamestate = new Gamestate;

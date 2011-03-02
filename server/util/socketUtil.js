@@ -71,7 +71,7 @@ exports.message = function(obj) {
   return;
 }
 
-/*when the server gets a message from the user
+/*when the server gets a disconnect message from the user
  *@arg obj.
  *         client   client object
  *         socket   the socket object
