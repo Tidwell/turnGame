@@ -1,3 +1,19 @@
+.module{ 
+  padding: 20px;
+  margin: 10px auto;
+  border: 1px solid;
+  width: 300px;
+  display: none;
+  overflow: hidden;
+  position: relative;
+}
+.module h2 {
+  font-size: 24px;
+  text-align: center;
+  margin: 5px auto;
+}
+
+
 .error,
 .success {
   display: block;
@@ -40,6 +56,33 @@ img.loading {
   padding: 10px;
   margin: 0 auto;
   width: 180px;
+}
+
+#matchmaker h3 {
+  text-align: center;
+  margin: 10px auto;
+  font-size: 30px;
+  display: none;
+}
+
+
+#gamestate li {
+  padding: 2px;
+  margin: 1px;
+}
+
+#gamestate table {
+  border: 0;
+  background: url(/images/gameboard.png);
+}
+#gamestate tr {
+  height: 100px;
+}
+#gamestate td {
+  width: 100px;
+  text-align: center;
+  font-size: 100px;
+  line-height: 100px;
 }
 
 #matchmaker h3 {
