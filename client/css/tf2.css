@@ -265,7 +265,73 @@ background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transpare
 }
 
 
+#redCards {
+ height: 300px;
+    left: 0px !important;
+    margin-top: 50px;
+    padding: 42px;
+    position: absolute;
+    top: 300px;
+    width: 2600px;
 
+}
+.card {
+  width: 300px;
+  height: 300px;
+  background-position: 0 0;
+  display: inline-block;
+  margin-left: -200px;
+  left: -110px;
+}
+
+#coverWrapper {
+   -moz-transform: scale(0.33);
+    transform: scale(.33);
+    height: 320px;
+    left: 0px;
+    position: relative;
+    top: 25px;
+    width: 300px;
+    z-index: 9999;
+}
+
+.card.active {
+    margin-bottom: 250px;
+    margin-left: 120px;
+    margin-right: 270px;
+    z-index: 9;
+}
+
+.cards.red .card{
+  background-image: url(/images/redCards.png);
+}
+.card.soldier {
+  background-position: 0 0;
+}
+.card.pyro {
+  background-position: -300px 0;
+}
+.card.sniper {
+  background-position: -600px 0;
+}
+.card.medic {
+  background-position: 0 -300px;
+}
+.card.scout {
+  background-position: -300px -300px;
+}
+.card.heavy {
+  background-position: -600px -300px;
+}
+.card.engie {
+  background-position: 0px -600px;
+}
+.card.demo {
+  background-position: -300px -600px;
+}
+.card.spy {
+  background-position: -600px -600px;
+}
 
 
 

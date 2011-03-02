@@ -10,6 +10,24 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
     <script src="/lib/jquery.json.js"></script>
     
+    
+    <script type="text/javascript" src="/lib/ui.coverflow.js"></script>
+    
+	<!-- Include jQuery CoverFlow II widget -->
+	<script type="text/javascript" src="/lib/ui.coverflow.js"></script>
+	<!-- Transformie is a plugin that makes webkit's CSS transforms work in Internet Explorer -->
+	
+	
+	<!-- Include mousewheel dependancies and app files -->
+	<script src="/lib/jquery.mousewheel.min.js" type="text/javascript"></script>
+
+    
+    
+    
+    
+    
+		<script src="/lib/jquery.transform.js"></script>    
+    
     <!--socket connection-->
 		<script src="/js/json.js"></script> <!-- for ie -->
 		<script src="/socket.io/socket.io.js"></script>
@@ -33,17 +51,33 @@
         socket = new io.Socket(null, {port: 8080, rememberTransport: false});
         socket.connect();
         
-        //create the module loader object and pass it the socket
-        var moduleLoader = new moduleLoaderUtil(socket);
-        
-        //load the modules, passing a callback for when all modules are loaded
-        moduleLoader.load(function() {
-          $('#loading').fadeOut(function() {
-            $('#auth').hide();
-            $('#matchmaker').show();
-            $('#gamestate').hide();
+        $('#matchmaker').hide();
+        socket.on('connect', function() {
+          //create the module loader object and pass it the socket
+          var moduleLoader = new moduleLoaderUtil(socket);
+          
+          //load the modules, passing a callback for when all modules are loaded
+          moduleLoader.load(function() {
+            $('#loading').fadeOut(function() {
+              $('#auth').hide();
+              $('#matchmaker').show();
+              $('#gamestate').hide();
+            });
           });
         });
+        
+     		//Initialize CoverFlow
+        $('#redCards').coverflow({
+            item: 5,
+            duration:500,
+            select: function(event, el) {
+              $('.card.active').removeClass('active', 500);
+              $(el.item).addClass('active', 500);
+              $(el.item).animate({scale: 3}, 500)
+            }
+        });
+        $($('#redCards li')[5]).addClass('active').css({scale: 3});      
+
         
       });
 		</script>
@@ -105,6 +139,20 @@
          
           </div>
       </div> 
+      
+      <div id="coverWrapper" style="display: none">
+      <ul id="redCards" class="cards red">
+          <li class="spy card"></li>
+          <li class="sniper card"></li>
+          <li class="scout card"></li>
+          <li class="medic card"></li>
+          <li class="heavy card"></li>
+          <li class="engie card"></li>
+          <li class="demo card"></li>
+          <li class="pyro card"></li>
+          <li class="soldier card"></li>
+      </ul>
+      </div>
       
       <div id="map_editor">
         <p class="selected">Selected Tile: <span></span></p>

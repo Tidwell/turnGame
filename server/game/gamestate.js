@@ -10,7 +10,7 @@ var
   
 function gamestate(eventEmitter) {
   this.eventEmitter = eventEmitter;
-  this.maxPlayers = 2;
+  this.maxPlayers = 1;
   this.activePlayer = 0;
   this.players = [];
   this.map;

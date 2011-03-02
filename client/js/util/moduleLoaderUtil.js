@@ -1,9 +1,16 @@
 var moduleLoaderUtil = function() { 
   var callback;
+  var nonSharedModules = [];
+  
+  this.add = function(moduleName) {
+    nonSharedModules.push(moduleName);
+  };
+  
   this.load = function(userCallback) {
     callback = userCallback;
     //get the list of modules to load (from shared class included on index)
     var moduleList = new modulesToLoad;
+    moduleList = moduleList.concat(nonSharedModules);
     //load each module
     moduleList.forEach(function(moduleName) {
       $.getScript('/js/modules/'+moduleName+'.js', function(data){ moduleLoadComplete(moduleName) });
