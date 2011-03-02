@@ -9,7 +9,7 @@ var
   
 function gamestate(eventEmitter) {
   this.eventEmitter = eventEmitter;
-  this.maxPlayers = 1;
+  this.maxPlayers = 2;
   this.activePlayer = 0;
   this.players = [];
   this.board = 
@@ -37,8 +37,9 @@ gamestate.prototype = require('Gamestate').Gamestate;
 *         connectedUsers connectedUsers obj, keyed by sessionId
 */
 gamestate.prototype.startGame = function(obj) {
+  log('gamestart');
   this.activePlayer = this.players[Math.floor(Math.random()*2)];
-  this.sendAllPlayers({type: 'activePlayer', args: {player: this.activePlayer}}, socket);
+  this.sendAllPlayers({type: 'activePlayer', args: {player: this.activePlayer}}, obj.socket);
 }
 
 gamestate.prototype.placeLetter = function(obj) {
