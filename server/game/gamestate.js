@@ -10,7 +10,7 @@ var
 function gamestate(eventEmitter) {
   this.eventEmitter = eventEmitter;
   this.maxPlayers = 2;
-  this.activePlayer = 0;
+  this.activePlayer = {};
   this.players = [];
   this.board = 
   [
@@ -24,11 +24,10 @@ function gamestate(eventEmitter) {
 //set the inheratance to the system gamestate
 gamestate.prototype = require('Gamestate').Gamestate;
 
+
 /*
 * Called at the start of the game
 * Tells the players the player names
-* Makes the map
-* Gives the players their characters
 * sets the active player ranomly and tells the players
 *
 *@arg obj.
@@ -37,18 +36,25 @@ gamestate.prototype = require('Gamestate').Gamestate;
 *         connectedUsers connectedUsers obj, keyed by sessionId
 */
 gamestate.prototype.startGame = function(obj) {
-  log('gamestart');
+  this.sendAllPlayers({type: 'gameStart', args: {players: this.players}}, obj.socket);
+  var playerNames = [];
+  this.players.forEach(function(player) {
+    var name = (obj.connectedUsers[player.sessionId].name) ? obj.connectedUsers[player.sessionId].name : 'Anonymous'
+    playerNames.push(name);
+  });
+  this.sendAllPlayers({type: 'playerNames', args: {players: playerNames}}, obj.socket);
+  
   this.activePlayer = this.players[Math.floor(Math.random()*2)];
   this.sendAllPlayers({type: 'activePlayer', args: {player: this.activePlayer}}, obj.socket);
 }
 
 gamestate.prototype.placeLetter = function(obj) {
   //find out if the command comes from the active player
-  if (obj.client.sessionId == this.activePlayer) {
+  if (obj.client.sessionId == this.activePlayer.sessionId) {
     //get the current value on the board at the position
     var boardPosition = this.board[obj.args.y][obj.args.x];
     if (boardPosition == ' ') { //empty
-      if (this.players[0] == obj.client.sessionId) {
+      if (this.players[0].sessionId == obj.client.sessionId) {
         boardPosition = 'X';
       }
       else {
@@ -108,6 +114,16 @@ gamestate.prototype.checkGameEnd = function() {
     //game over
     return (this.board[2][0] == 'X') ? this.players[0] : this.players[1];
   }
+  
+  //check for the tie
+  var allFilled = true;
+  this.board.forEach(function(square) {
+    if (square == ' ') {
+      allFilled = false;
+    }
+  });
+  
+  
   return false;
 }
 module.exports = gamestate

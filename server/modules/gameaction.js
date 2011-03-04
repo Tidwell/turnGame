@@ -35,7 +35,7 @@ function gameaction() {
     var i = 0;
     obj.games.forEach(function(game) {
       game.players.forEach(function(player) {
-        if (player == obj.client.sessionId) {
+        if (player.sessionId == obj.client.sessionId) {
           targetGame = i;
         }
       });

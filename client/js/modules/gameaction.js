@@ -4,10 +4,9 @@ A new instance of this object is created when the module is loaded
 All DOM event bindings inside this object will be bound
 */
 
-function gameaction(socket) {
+function gameaction() {
   //to avoid this confusion
   var game = this;
-  this.mysocket = socket;
   
   this.gameShow = function() {
     $('#gamestate').fadeIn();
@@ -24,7 +23,7 @@ function gameaction(socket) {
     $('#gamestate ul li').remove();
     //add the new player info
     args.players.forEach(function(player) {
-      $('#gamestate ul.players').append('<li rel="'+player+'">'+player+'</li>');
+      $('#gamestate ul.players').append('<li rel="'+player.sessionId+'">'+player+'</li>');
     });
   }
 
@@ -49,7 +48,7 @@ function gameaction(socket) {
   */
   this.activePlayer = function(args) {
     $('#gamestate ul.players li').removeClass('active');
-    $('#gamestate ul.players li[rel='+args.player+']').addClass('active');
+    $('#gamestate ul.players li[rel='+args.player.sessionId+']').addClass('active');
   }
   
   this.boardUpdate = function(args) {
@@ -57,8 +56,8 @@ function gameaction(socket) {
   }
   
   this.gameOver = function(args) {
-    //console.log(args.winner.winner, this.mysocket.transport.sessionid);
-    if (Number(this.mysocket.transport.sessionid) == args.winner) {
+    //console.log(args.winner.winner, socket.transport.sessionid);
+    if (Number(socket.transport.sessionid) == args.winner.sessionId) {
       modules.matchmaker.endGame('win');
     }
     else {

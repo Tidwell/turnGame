@@ -34,8 +34,8 @@ function matchmaker() {
     games.forEach(function(game) {
       if (game.players[0] == winner || game.players[1] == winner) {
         toRemove = i;
-        obj.connectedUsers[game.players[0]].inGame = false;
-        obj.connectedUsers[game.players[1]].inGame = false;
+        obj.connectedUsers[game.players[0].sessionId].inGame = false;
+        obj.connectedUsers[game.players[1].sessionId].inGame = false;
       }
     });
     if (typeof toRemove != 'undefined') {
