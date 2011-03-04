@@ -56,12 +56,17 @@ function gameaction() {
   }
   
   this.gameOver = function(args) {
-    //console.log(args.winner.winner, socket.transport.sessionid);
-    if (Number(socket.transport.sessionid) == args.winner.sessionId) {
-      modules.matchmaker.endGame('win');
+    if (args.winner == 'tie') {
+      modules.matchmaker.endGame('tie');
     }
     else {
-      modules.matchmaker.endGame('lost');
+      //console.log(args.winner.winner, socket.transport.sessionid);
+      if (Number(socket.transport.sessionid) == args.winner.sessionId) {
+        modules.matchmaker.endGame('win');
+      }
+      else {
+        modules.matchmaker.endGame('lost');
+      }
     }
   }
   

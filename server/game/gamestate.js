@@ -66,6 +66,12 @@ gamestate.prototype.placeLetter = function(obj) {
       this.sendAllPlayers({type: 'boardUpdate', args: {change: obj.args, value: boardPosition}}, obj.socket);
       var isWinner = this.checkGameEnd();
       if (isWinner != false) {
+        if (isWinner == 'tie') {
+          obj.winner = 'tie';
+          this.gameOver(obj);
+          return false;
+        }
+        //otherwise someone won
         obj.winner = isWinner
         this.gameOver(obj);
         return false;
@@ -117,12 +123,14 @@ gamestate.prototype.checkGameEnd = function() {
   
   //check for the tie
   var allFilled = true;
-  this.board.forEach(function(square) {
-    if (square == ' ') {
-      allFilled = false;
-    }
+  this.board.forEach(function(row) {
+    row.forEach(function(square) {
+      if (square == ' ') {
+        allFilled = false;
+      }
+    });
   });
-  
+  if (allFilled) return 'tie';
   
   return false;
 }

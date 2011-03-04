@@ -48,6 +48,7 @@ function Gamestate() {
   
   //sends a game over event to the players and sends out the event
   this.gameOver = function(obj) {
+    obj.players = this.players;
     this.sendAllPlayers({type: 'gameOver', args: {winner: obj.winner}}, obj.socket);
     this.eventEmitter.emit('gameEnd', obj);
   }

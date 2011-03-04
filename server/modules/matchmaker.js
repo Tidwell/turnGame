@@ -32,7 +32,7 @@ function matchmaker() {
     var i = 0;
     var toRemove = undefined;
     games.forEach(function(game) {
-      if (game.players[0] == winner || game.players[1] == winner) {
+      if (game.players[0].sessionId == obj.players[0].sessionId || game.players[1].sessionId == obj.players[0].sessionId) {
         toRemove = i;
         obj.connectedUsers[game.players[0].sessionId].inGame = false;
         obj.connectedUsers[game.players[1].sessionId].inGame = false;
