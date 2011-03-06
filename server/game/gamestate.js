@@ -1,16 +1,20 @@
 /*
 Gamestate class that is used by the gameaction module
 */
+
+//add our require paths to the require array
 require.paths.unshift('system/');
+require.paths.unshift('shared/');
 
 var 
   log = require('logging'),
   characters = require('characters'),
-  maps = require('maps.js');
+  maps = require('maps.js'),
+  validAdjacent = require('gameCalcs.js').validAdjacent;
   
 function gamestate(eventEmitter) {
   this.eventEmitter = eventEmitter;
-  this.maxPlayers = 1;
+  this.maxPlayers = 2;
   this.activePlayer = 0;
   this.players = [];
   this.map;
@@ -175,12 +179,9 @@ gamestate.prototype.rotateActive = function(obj) {
   game.players.forEach(function(player) {
     if (game.activePlayer.sessionId == player.sessionId && set == false) {
       set = true;
-      if (i == 0) {
-        game.activePlayer = game.players[1];
-      }
-      else {
-        game.activePlayer = game.players[0];
-      }
+      var nextPlayer = i++;
+      if (i >= game.players.length) { i = 0 }
+      game.activePlayer = game.players[i];
     }
     i++;
   });

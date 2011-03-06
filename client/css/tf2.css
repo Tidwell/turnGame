@@ -10,6 +10,8 @@ body {
   display: block;
   margin: 5px auto;
   width: 1000px;
+  -moz-transform: scale(0.5);
+  z-index: 8000;
 }
 
 #playerchars .characters{
@@ -28,6 +30,20 @@ body {
   height: 55px;
   float: right;
   
+}
+#players {
+  width: 120px;
+  border: 2px solid;
+  z-index: 9000;
+}
+#players li {
+  overflow: hidden;
+  clear: both;
+}
+#players li span {
+  text-align: center;
+  width: 60px;
+  float: right;
 }
 #players .blue {
   border: 1px solid blue;
@@ -87,7 +103,7 @@ body {
 #map {
   width: 990px;
   height: 400px;
-  margin: 100px auto;
+  margin: 00px auto;
   position: absolute;
   top: 75px;
   left: 50%;
@@ -100,6 +116,14 @@ body {
   position: absolute;
   top: 0px;
   left: 10px;
+}
+#map .hex .highlight {
+  width: 114px; 
+  height: 157px; 
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: url(/images/hexes/highlight_hex.png);
 }
 #map .hex._default {
   background: url(/images/hexes/default.png);
@@ -289,8 +313,8 @@ background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transpare
     transform: scale(.33);
     height: 320px;
     left: 0px;
-    position: relative;
-    top: 25px;
+    position: absolute;
+    top: 0px;
     width: 300px;
     z-index: 9999;
 }
@@ -301,7 +325,27 @@ background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transpare
     margin-right: 270px;
     z-index: 9;
 }
-
+.card .move {
+  background-image: url("/images/move_icon.png");
+    bottom: 45px;
+    display: block;
+    height: 43px;
+    position: absolute;
+    right: 3px;
+    width: 40px;
+}
+.card .move .cost {
+  color: black;
+  display: block;
+  font-family: Helvetica;
+  font-size: 24px;
+  font-weight: bold;
+  height: 20px;
+  left: -22px;
+  position: absolute;
+  top: 15px;
+  width: 20px;
+}
 .cards.red .card{
   background-image: url(/images/redCards.png);
 }
@@ -333,7 +377,15 @@ background: url("/images/redtrans2.png") no-repeat scroll -1800px 10px transpare
   background-position: -600px -600px;
 }
 
-
+.cancelAction {
+  width: 100px;
+  height: 30px;
+  font-size: 25px;
+  text-align: center;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
 
 #map_editor {
   position: absolute;

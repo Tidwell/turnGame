@@ -3,11 +3,14 @@ Module for gamestate events, (aka gameaction)
 A new instance of this object is created when the module is loaded
 All DOM event bindings inside this object will be bound
 */
+//create our object that is shared with the server
+var gameCalcs = new gameCalcs;
 
 function gameaction() {
   //to avoid this confusion
   var game = this;
   var myId;
+  var myColor;
   
   this.map;
   this.players;
@@ -24,6 +27,8 @@ function gameaction() {
     $('.characters li span, .characters li .img').remove();
     $('.characters li').append('<span></span><div class="img"></div>');
     myId = socket.transport.sessionid;
+    $('#players').draggable();
+    $('#playerchars').draggable();
   }
 
   /*
@@ -33,9 +38,12 @@ function gameaction() {
   */
   
   this.playerInfo = function(args) {
-   $('#gamestate ul.players li').remove();
-   $(args.players).each(function() {
-      $('#gamestate ul.players').append('<li rel="'+this.sessionId+'" class="'+this.color+'">'+this.name+'</li>');
+    $('#gamestate ul.players li').remove();
+    $(args.players).each(function() {
+      if (this.sessionId == myId) {
+        myColor = this.color;
+      }
+      $('#gamestate ul.players').append('<li rel="'+this.sessionId+'" class="'+this.color+'">'+this.name+' <span class="ap">'+this.ap+'</span></li>');
     });
   }
   
@@ -48,31 +56,119 @@ function gameaction() {
     $('#gamestate ul.players li').removeClass('active');
     $('#gamestate ul.players li[rel='+args.player.sessionId+']').addClass('active');
     if (args.player.sessionId == myId) {
-      alert('Click a hex to move a random '+args.player.color+' character matching one of the types of characters in the hex');
-      $('.hex').unbind().click(function() {
-        var chars = $(this).children('.char');
-        var toRel = $($('.hex')[Math.floor(Math.random()*($('.hex').length-1))]).attr('rel');
-        if (toRel) {
-          var to = {
-            x: undefined,
-            y: undefined
-          };
-          toRel = toRel.split('y');
-          toRel[0] = toRel[0].replace('x','');
-          to.x = toRel[0];
-          to.y = toRel[1];
-        }
-        var character = $(chars[Math.floor(Math.random()*(chars.length-1))]).attr('rel');
-        if (character && to.x && to.y) {
+      bindSelectHexForYourCharacter();
+    }
+  }
+
+  var bindSelectHexForYourCharacter = function() {
+    $('.hex').unbind().click(function() {
+      var chars = $(this).children('.char.'+myColor+'Team');
+      if (chars.length > 0) {
+        $('#coverWrapper li').hide();
+        $(chars).each(function() {
+          var classes = this.className.split(/\s+/);
+          $(classes).each(function() {
+            $('#coverWrapper .'+this).show();
+          });
+        });
+        bindMove();
+      }
+      else {
+        alert('You dont have any characters in that Hex');
+      }
+    });
+    alert('Pick a chacter to perform an action with');
+  }
+  
+  var bindMove = function() {
+    $('#coverWrapper .move').unbind().click(function() {
+      var gameClass = $(this).parent().attr('gameClass');
+      var validHexes = gameCalcs.validMoveableHexes($('.char.'+myColor+'Team.'+gameClass).parent().attr('rel'), game.map);
+      game.removeAllHighlights();
+      $('.hex').unbind();
+      $(validHexes).each(function() {
+        game.highlight(this);
+        var hex = $('.hex[rel=x'+this.x+'y'+this.y+']');
+        $(hex).click(function() {
+          var toRel = $(this).attr('rel');
+          if (toRel) {
+            var to = {
+              x: undefined,
+              y: undefined
+            };
+            toRel = toRel.split('y');
+            toRel[0] = toRel[0].replace('x','');
+            to.x = toRel[0];
+            to.y = toRel[1];
+          }
           socket.send({type: 'move', args: {
-            character: character,
+            character: gameClass,
             to: to
           }});
           $('.hex').unbind();
-        }
+          game.removeAllHighlights();
+          $('.cancelAction').hide();
+        });
       });
-    }
+      bindCancel(function() {
+        game.removeAllHighlights();
+        bindSelectHexForYourCharacter();
+      });
+      $('#coverWrapper').hide();
+    });
+    $('#coverWrapper').fadeIn();
+    bindCancel(function() {
+      $('#coverWrapper').hide();
+      bindSelectHexForYourCharacter();
+    });
   }
+  
+  var bindCancel = function(callback) {
+    $('.cancelAction').unbind().click(function() {
+      $('.cancelAction').fadeOut();
+      callback();
+    }).fadeIn();
+  }
+  
+  //accepts obj, obj.x obj.y of hex to add highlight to
+  this.highlight = function(hex) {
+    var sel = '.hex[rel=x'+hex.x+'y'+hex.y+']';
+    $(sel).append('<div class="highlight"></div>');
+  }
+  
+  this.removeAllHighlights = function() {
+    $('.hex .highlight').remove();
+  }
+  
+  
+  var bindRandom = function(args) {
+    alert('Click a hex to move a random '+args.player.color+' character matching one of the types of characters in the hex');
+    $('.hex').unbind().click(function() {
+      var chars = $(this).children('.char');
+      var toRel = $($('.hex')[Math.floor(Math.random()*($('.hex').length-1))]).attr('rel');
+      if (toRel) {
+        var to = {
+          x: undefined,
+          y: undefined
+        };
+        toRel = toRel.split('y');
+        toRel[0] = toRel[0].replace('x','');
+        to.x = toRel[0];
+        to.y = toRel[1];
+      }
+      var character = $(chars[Math.floor(Math.random()*(chars.length-1))]).attr('rel');
+      if (character && to.x && to.y) {
+        socket.send({type: 'move', args: {
+          character: character,
+          to: to
+        }});
+        $('.hex').unbind();
+      }
+    });
+  }
+  
+  
+  
   
   this.gameOver = function(args) {
     if (Number(socket.transport.sessionid) == args.winner.sessionId) {

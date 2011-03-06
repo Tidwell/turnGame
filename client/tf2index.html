@@ -39,6 +39,7 @@
 -->    
     <!--shared classes-->
     <script src="/shared/isValidName.js"></script>
+    <script src="/shared/gameCalcs.js"></script>
 
     <script type="text/javascript">
 			//global so everything can talk
@@ -142,18 +143,54 @@
       
       <div id="coverWrapper" style="display: none">
       <ul id="redCards" class="cards red">
-          <li class="spy card"></li>
-          <li class="sniper card"></li>
-          <li class="scout card"></li>
-          <li class="medic card"></li>
-          <li class="heavy card"></li>
-          <li class="engie card"></li>
-          <li class="demo card"></li>
-          <li class="pyro card"></li>
-          <li class="soldier card"></li>
+          <li class="spy card" gameClass="spy">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="sniper card" gameClass="sniper">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="scout card" gameClass="scout">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="medic card" gameClass="medic">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="heavy card" gameClass="heavy">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="engie card" gameClass="engie">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="demo card" gameClass="demo">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="pyro card" gameClass="pyro">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
+          <li class="soldier card" gameClass="soldier">
+            <span class="move">
+              <span class="cost">15</span>
+            </span>
+          </li>
       </ul>
       </div>
-      
+      <button class="cancelAction" style="display: none">Cancel</button>
       <div id="map_editor">
         <p class="selected">Selected Tile: <span></span></p>
         <p>Type: 
