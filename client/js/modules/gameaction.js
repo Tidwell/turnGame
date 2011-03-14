@@ -70,6 +70,10 @@ function gameaction() {
     }
   }
   
+  this.opponentDisconnect = function(args) {
+    alert('Your opponent has disconnected');
+  }
+  
   $('#gamestate td').click(function() {
     var loc = {
       x: $(this).attr('rel')[1],

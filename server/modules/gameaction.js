@@ -13,6 +13,7 @@ function gameaction() {
   */
   this.listen = function(eventEmitter) {
     eventEmitter.on('placeLetter', this.placeLetter);
+    eventEmitter.on('userDisconnect', this.userDisconnect);
   }
   
   
@@ -30,19 +31,34 @@ function gameaction() {
   *         games          array of all games
   */
   this.placeLetter = function(obj) {
-    //get the specific game object this is intended for
-    var targetGame;
-    var i = 0;
-    obj.games.forEach(function(game) {
-      game.players.forEach(function(player) {
-        if (player.sessionId == obj.client.sessionId) {
-          targetGame = i;
-        }
-      });
-      i++;
-    });
-    obj.games[targetGame].placeLetter(obj);
+    var game = obj.connectedUsers.findGameFromClientSessionId(obj);
+    game.placeLetter(obj);
+  }
+   
+  /*
+  *Called when a user disconnects
+  *
+  *@arg obj.
+  *         client         client object
+  *         socket         the socket object
+  *         connectedUsers object of connected users, indexed by session id
+  *         games          array of all games
+  */
+  this.userDisconnect = function(obj) {
+    var game = obj.connectedUsers.findGameFromClientSessionId(obj);
+    if (game) {
+      game.userDisconnect(obj);
+    }
+    else {
+      //we won't find a game when a user is not in a game and disconnects - if this is single-world, or users auto-join
+      //the game when authenticated, you should probably uncomment this as you always want to find the game on disconnect
+      
+      //throw new Error('Couldn\'t find game in userDisconnect handler in gameaction');
+    }
   }
 }
+
+
+
 
 module.exports = gameaction

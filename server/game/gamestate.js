@@ -64,29 +64,27 @@ gamestate.prototype.placeLetter = function(obj) {
       this.board[obj.args.y][obj.args.x] = boardPosition;
       //tell the players
       this.sendAllPlayers({type: 'boardUpdate', args: {change: obj.args, value: boardPosition}}, obj.socket);
-      var isWinner = this.checkGameEnd();
-      if (isWinner != false) {
-        if (isWinner == 'tie') {
-          obj.winner = 'tie';
-          this.gameOver(obj);
-          return false;
-        }
-        //otherwise someone won
-        obj.winner = isWinner
-        this.gameOver(obj);
-        return false;
+      var isWinner = this.checkGameEnd(obj);
+      if (!isWinner) {
+        //change the active player
+        this.activePlayer = (boardPosition=='X') ? this.players[1] : this.players[0];
+        //tell the players
+        this.sendAllPlayers({type: 'activePlayer', args: {player: this.activePlayer}}, obj.socket);
       }
-      //change the active player
-      this.activePlayer = (boardPosition=='X') ? this.players[1] : this.players[0];
-      //tell the players
-      this.sendAllPlayers({type: 'activePlayer', args: {player: this.activePlayer}}, obj.socket);
     }
   }
 }
 
 
-gamestate.prototype.checkGameEnd = function() {
+gamestate.prototype.checkGameEnd = function(obj) {
+  var winning = false;
+  
   var players = this.players;
+  //check if we no longer have enough players
+  if (players.length < this.maxPlayers) {
+    winning = players[0];
+  }
+  
   var nullToken = ' ';
   
   //rows
@@ -96,7 +94,7 @@ gamestate.prototype.checkGameEnd = function() {
     var row = this.board[i];
     if ((row[0] == row[1] && row[0] == row[2]) && row[0] != nullToken) {
       //game over
-      return toReturn = (row[0] == 'X') ? players[0] : players[1];
+      winning = toReturn = (row[0] == 'X') ? players[0] : players[1];
     }
     i++;
   }
@@ -106,7 +104,7 @@ gamestate.prototype.checkGameEnd = function() {
   var numCols = this.board[0].length;
   while (i<numCols) {
     if (this.board[0][i] == this.board[1][i] && this.board[0][i] == this.board[2][i] && this.board[0][i] != nullToken) {
-      return (this.board[0][i] == 'X') ? players[0] : players[1];
+      winning = (this.board[0][i] == 'X') ? players[0] : players[1];
     }      
     i++;
   }
@@ -114,11 +112,11 @@ gamestate.prototype.checkGameEnd = function() {
   //diagonals
   if (this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2] && this.board[0][0] != nullToken) {
     //game over
-    return (this.board[0][0] == 'X') ? this.players[0] : this.players[1];
+    winning = (this.board[0][0] == 'X') ? this.players[0] : this.players[1];
   }
   if (this.board[2][0] == this.board[1][1] && this.board[2][0] == this.board[0][2] && this.board[2][0] != nullToken) {
     //game over
-    return (this.board[2][0] == 'X') ? this.players[0] : this.players[1];
+    winning = (this.board[2][0] == 'X') ? this.players[0] : this.players[1];
   }
   
   //check for the tie
@@ -130,8 +128,19 @@ gamestate.prototype.checkGameEnd = function() {
       }
     });
   });
-  if (allFilled) return 'tie';
+  if (allFilled) winning = 'tie';
   
-  return false;
+  var isWinner = winning;
+
+  if (isWinner != false) {
+    if (isWinner == 'tie') {
+      obj.winner = 'tie';
+      this.gameOver(obj);
+    }
+    //otherwise someone won
+    obj.winner = isWinner
+    this.gameOver(obj);
+  }
+  return isWinner;
 }
 module.exports = gamestate

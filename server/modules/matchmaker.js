@@ -25,22 +25,29 @@ function matchmaker() {
     this.eventEmitter = eventEmitter;
   }
   
+  
+  /*
+  *Called when a game broadcasts that it has ended.  Finds the corresponding game, unsets their inGame property and
+  *removes the game from the games array
+  *
+  *@arg obj.
+  *         client         client object
+  *         socket         the socket object
+  *         connectedUsers object of connected users, indexed by session id
+  *         games          array of all games
+  */
   this.gameEnd = function(obj) {
-    var winner = obj.winner, 
-        games = obj.games
-        
     var i = 0;
-    var toRemove = undefined;
-    games.forEach(function(game) {
-      if (game.players[0].sessionId == obj.players[0].sessionId || game.players[1].sessionId == obj.players[0].sessionId) {
-        toRemove = i;
-        obj.connectedUsers[game.players[0].sessionId].inGame = false;
-        obj.connectedUsers[game.players[1].sessionId].inGame = false;
+    var game = obj.connectedUsers.findGameFromClientSessionId(obj, obj.winner.sessionId);
+    if (!game) {
+      throw new Error('Could not find game in matchmaker.gameEnd');
+    }
+    game.players.forEach(function(player) {
+      if (obj.connectedUsers[player.sessionId]) {
+        obj.connectedUsers[player.sessionId].inGame = false;
       }
     });
-    if (typeof toRemove != 'undefined') {
-      games.remove(toRemove);
-    }
+    obj.games.remove(game.gameIndex)
   }
   
  /*
@@ -74,7 +81,6 @@ function matchmaker() {
     if (emptyGame != null) {
       //if we found a game
       obj.games[emptyGame].addPlayer({socket: obj.socket, client: obj.client, connectedUsers: obj.connectedUsers});
-      //log(obj.games);
       return true;
     }
     //otherwise create a new gamestate
@@ -82,6 +88,9 @@ function matchmaker() {
     g.addPlayer({socket: obj.socket, client: obj.client, connectedUsers: obj.connectedUsers});
     obj.games.push(g);
   }
+  
+  
+  
 }
 
 //declare the module

@@ -12,6 +12,7 @@ function Gamestate() {
   this.eventEmitter;
   this.maxPlayers;
   
+  
   //returns the players in the game 
   this.getPlayers = function() {
     return this.players; 
@@ -68,6 +69,44 @@ function Gamestate() {
     if (this.players.length == this.maxPlayers) {
       this.startGame(obj)
     }
+  }
+   
+  /*
+  *Notified when a player in this game disconnects from the service
+  *
+  *@arg obj.
+  *         client         client object
+  *         socket         the socket object
+  *         connectedUsers connectedUsers obj, keyed by sessionId
+  */
+  this.userDisconnect = function(obj) {
+    var game = this;
+    var i = 0;
+    var toDelete = null;
+    this.players.forEach(function(player) {
+      if (player.sessionId != obj.client.sessionId) {
+        game.sendPlayer({type: 'opponentDisconnect', args: {opponentDisconnect: obj.client.sessionId}}, player.sessionId, obj.socket);
+      }
+      if (player.sessionId == obj.client.sessionId) {
+        toDelete = i;
+      }
+      i++;
+    });
+    this.players.remove(toDelete);
+    this.checkGameEnd(obj);
+  }
+  
+  /*
+  *Required on all Gamestates, function to determine if the game has ended.  
+  *Should either return a winning player object, the string 'tie' or the bool false
+  *
+  *@arg obj.
+  *         client         client object
+  *         socket         the socket object
+  *         connectedUsers connectedUsers obj, keyed by sessionId
+  */
+  this.checkGameEnd = function(obj) {
+    return false;
   }
 }
 

@@ -1,7 +1,7 @@
 /*
 Creates a message handler object to be passed to modules to attach their listeners to
 */
-
+ 
 //assignment/loading
 var   
       //node.js libraries
