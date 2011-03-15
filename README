@@ -1,0 +1,17 @@
+TODO
+----
+
+Convert Static File Server to use 
+node-static: RFC2616 compliant HTTP static-file server module, with built-in caching
+
+Refactor Methods for working with games and users into objects
+
+Consistant file nameing scheme
+
+Documentation standard choice
+
+Event Refactoring (possibly make all module extend a base object that extends event emitter)
+
+Client side event listeners
+
+Abstract out the socket
