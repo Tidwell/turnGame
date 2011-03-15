@@ -15,3 +15,9 @@ Event Refactoring (possibly make all module extend a base object that extends ev
 Replace client side 'magic method calling' with true event listeners
 
 Abstract out the socket
+
+
+
+Bugs
+----
+When user disconnects after joining game but before opponent joins, crashes server. **FIXED**
