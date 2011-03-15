@@ -1,0 +1,27 @@
+.module{ 
+  padding: 20px;
+  margin: 10px auto;
+  border: 1px solid;
+  width: 300px;
+  display: none;
+  overflow: hidden;
+  position: relative;
+}
+.module h2 {
+  font-size: 24px;
+  text-align: center;
+  margin: 5px auto;
+}
+.showlink {
+  position: absolute;
+  text-align: right;
+  font-size: 12px;
+  bottom: 5px;
+  right: 5px;
+  cursor: pointer;
+  color: blue;
+  display: none;
+}
+.showlink:focus, .showlink:hover {
+  text-decoration: underline;
+}

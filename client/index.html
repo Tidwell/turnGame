@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Tic-Tac-Toe M-M-O</title>
-		<link rel="stylesheet" type="text/css" href="/css/reset.css" />
-		<link rel="stylesheet" type="text/css" href="/css/common.css" />
-		<!--jquery-->
+  <head>
+    <title>Tic-Tac-Toe M-M-O</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <!--Module Stylesheets-->
+    <link rel="stylesheet" type="text/css" href="/css/modules/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/modules/auth.css" />
+    <link rel="stylesheet" type="text/css" href="/css/modules/gameaction.css" />
+    <link rel="stylesheet" type="text/css" href="/css/modules/matchmaker.css" />
+    
+    <!--jquery-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <!--socket connection-->
-		<script src="/js/json.js"></script> <!-- for ie -->
-		<script src="/socket.io/socket.io.js"></script>
+    <script src="/js/json.js"></script> <!-- for ie -->
+    <script src="/socket.io/socket.io.js"></script>
     <!-- module loading-->
     <script src="/shared/_modulesToLoad.js"></script>
     <script src="/js/util/moduleLoaderUtil.js"></script>
@@ -16,10 +22,10 @@
     <script src="/shared/example.js"></script>
     <script src="/shared/isValidName.js"></script>
     <script type="text/javascript">
-			var modules = [];
-			var socket;
-			
-			$(function() { //on DOM ready 
+      var modules = [];
+      var socket;
+      
+      $(function() { //on DOM ready 
         //create the socket connection and connect
         socket = new io.Socket(null, {port: 8080, rememberTransport: false});
         socket.connect();
@@ -41,9 +47,9 @@
         //console.log(shared.publicMethod());
         //console.log(shared.publicAttribute);
       });
-		</script>
-	</head>
-	<body>
+    </script>
+  </head>
+  <body>
     <!--HTML for the auth Module-->
     <div id="auth" class="module">
       <h2>Auth Module</h2>
