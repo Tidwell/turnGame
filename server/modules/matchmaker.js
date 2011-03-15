@@ -37,17 +37,32 @@ function matchmaker() {
   *         games          array of all games
   */
   this.gameEnd = function(obj) {
-    var i = 0;
-    var game = obj.connectedUsers.findGameFromClientSessionId(obj, obj.winner.sessionId);
-    if (!game) {
-      throw new Error('Could not find game in matchmaker.gameEnd');
-    }
-    game.players.forEach(function(player) {
-      if (obj.connectedUsers[player.sessionId]) {
-        obj.connectedUsers[player.sessionId].inGame = false;
+    //if there was no winner, than we have an empty game due to disconnect, and we need to run a cleanup to remove em
+    if (obj.winner) {
+      var i = 0;
+      var game = obj.connectedUsers.findGameFromClientSessionId(obj, obj.winner.sessionId);
+      if (!game) {
+        throw new Error('Could not find game in matchmaker.gameEnd');
       }
-    });
-    obj.games.remove(game.gameIndex)
+      game.players.forEach(function(player) {
+        if (obj.connectedUsers[player.sessionId]) {
+          obj.connectedUsers[player.sessionId].inGame = false;
+        }
+      });
+      obj.games.remove(game.gameIndex)
+    }
+    else {
+      var i = 0;
+      var toDelete;
+      obj.games.forEach(function(game) {
+        log(game);
+        if (game.players.length == 0) {
+          toDelete = i;    
+        }
+        i++;
+      })
+      obj.games.remove(toDelete)
+    }
   }
   
  /*

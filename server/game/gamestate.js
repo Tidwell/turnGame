@@ -36,6 +36,7 @@ gamestate.prototype = require('Gamestate').Gamestate;
 *         connectedUsers connectedUsers obj, keyed by sessionId
 */
 gamestate.prototype.startGame = function(obj) {
+  this.started = true;
   this.sendAllPlayers({type: 'gameStart', args: {players: this.players}}, obj.socket);
   var playerNames = [];
   this.players.forEach(function(player) {

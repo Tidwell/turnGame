@@ -11,6 +11,7 @@ listen (in case the gamestate doesn't listen for anything)
 function Gamestate() {
   this.eventEmitter;
   this.maxPlayers;
+  this.started = false;
   
   
   //returns the players in the game 
