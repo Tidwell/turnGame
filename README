@@ -12,6 +12,6 @@ Documentation standard choice
 
 Event Refactoring (possibly make all module extend a base object that extends event emitter)
 
-Client side event listeners
+Replace client side 'magic method calling' with true event listeners
 
 Abstract out the socket
