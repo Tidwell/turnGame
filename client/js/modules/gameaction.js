@@ -61,7 +61,8 @@ function gameaction() {
     }
     else {
       //console.log(args.winner.winner, socket.transport.sessionid);
-      if (Number(socket.transport.sessionid) == args.winner.sessionId) {
+      if (args.winner.length != undefined) args.winner = args.winner[0];
+      if (Number(socket.transport.sessionid) == args.winner.sessionId) { 
         modules.matchmaker.endGame('win');
       }
       else {

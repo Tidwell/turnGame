@@ -14,8 +14,15 @@ Event Refactoring (possibly make all module extend a base object that extends ev
 
 Replace client side 'magic method calling' with true event listeners
 
-Abstract out the socket
+Abstract out the socket (or write wrappers but keep socket in place)
 
+Redefine users to be objects with properties and methods interacting with database storage layer.
+
+Abstract user disconnection from the matchmaker module
+
+Add mongodb database storage layer
+
+Abstract user disconnection from the gamestate/gameaction **FIXED**
 
 
 Bugs

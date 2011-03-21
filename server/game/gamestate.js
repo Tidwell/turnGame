@@ -9,15 +9,25 @@ var
   
 function gamestate(eventEmitter) {
   this.eventEmitter = eventEmitter;
-  this.maxPlayers = 2;
-  this.activePlayer = {};
-  this.players = [];
+  
+  /*Set the Required Gamestate Options*/
+  this.type = 'multipleWorld'; //we want multiple tic-tac-toe games
+  this.timing = 'turnBased'; //tic-tac-toe is turn based
+  this.endable = true; //and the games can end 
+  this.minPlayers = 2; //the minimum number of players for a game is 2
+  
+  /*Set my tic-tac-toe specific variables (stuff here will be in every instance of a gamestate)*/
   this.board = 
   [
   [' ',' ',' '],
   [' ',' ',' '],
   [' ',' ',' ']
   ]
+  
+  /*Stuff specific to this gamestate*/
+  this.activePlayer = {};
+  this.players = [];
+
 
 }
 
@@ -65,8 +75,8 @@ gamestate.prototype.placeLetter = function(obj) {
       this.board[obj.args.y][obj.args.x] = boardPosition;
       //tell the players
       this.sendAllPlayers({type: 'boardUpdate', args: {change: obj.args, value: boardPosition}}, obj.socket);
-      var isWinner = this.checkGameEnd(obj);
-      if (!isWinner) {
+      var gameOver = this.checkGameEnd(obj);
+      if (!gameOver) {
         //change the active player
         this.activePlayer = (boardPosition=='X') ? this.players[1] : this.players[0];
         //tell the players
@@ -76,18 +86,28 @@ gamestate.prototype.placeLetter = function(obj) {
   }
 }
 
-
+ 
 gamestate.prototype.checkGameEnd = function(obj) {
-  var winning = false;
-  
+  var gameOver = false;
+  var winner = null;
   var players = this.players;
-  //check if we no longer have enough players
-  if (players.length < this.maxPlayers) {
-    winning = players[0];
+  
+  log('players------------>');
+  log(players);
+  //check if we no longer have enough players, and there are players left
+  if (players.length < this.minPlayers && players.length > 0) {
+    gameOver = true;
+    winner = players;
+  }
+  //check if we have 0 players left in this game
+  if (players.length == 0) {
+    log('everyone disco');
+    gameOver = true;
+    winner = 'allPlayerDisconnect';
   }
   
+  //define a null token on the board to check against
   var nullToken = ' ';
-  
   //rows
   var numRows = this.board.length;
   var i = 0;
@@ -95,7 +115,8 @@ gamestate.prototype.checkGameEnd = function(obj) {
     var row = this.board[i];
     if ((row[0] == row[1] && row[0] == row[2]) && row[0] != nullToken) {
       //game over
-      winning = toReturn = (row[0] == 'X') ? players[0] : players[1];
+      gameOver = true;
+      winner = toReturn = (row[0] == 'X') ? players[0] : players[1];
     }
     i++;
   }
@@ -105,7 +126,8 @@ gamestate.prototype.checkGameEnd = function(obj) {
   var numCols = this.board[0].length;
   while (i<numCols) {
     if (this.board[0][i] == this.board[1][i] && this.board[0][i] == this.board[2][i] && this.board[0][i] != nullToken) {
-      winning = (this.board[0][i] == 'X') ? players[0] : players[1];
+      gameOver = true;
+      winner = (this.board[0][i] == 'X') ? players[0] : players[1];
     }      
     i++;
   }
@@ -113,11 +135,13 @@ gamestate.prototype.checkGameEnd = function(obj) {
   //diagonals
   if (this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2] && this.board[0][0] != nullToken) {
     //game over
-    winning = (this.board[0][0] == 'X') ? this.players[0] : this.players[1];
+    gameOver = true;
+    winner =  (this.board[0][0] == 'X') ? this.players[0] : this.players[1];
   }
   if (this.board[2][0] == this.board[1][1] && this.board[2][0] == this.board[0][2] && this.board[2][0] != nullToken) {
     //game over
-    winning = (this.board[2][0] == 'X') ? this.players[0] : this.players[1];
+    gameOver = true;
+    winner =  (this.board[2][0] == 'X') ? this.players[0] : this.players[1];
   }
   
   //check for the tie
@@ -129,19 +153,16 @@ gamestate.prototype.checkGameEnd = function(obj) {
       }
     });
   });
-  if (allFilled) winning = 'tie';
+  if (allFilled) {
+    gameOver = true;
+    winner = 'tie';
+  }
   
-  var isWinner = winning;
-
-  if (isWinner != false) {
-    if (isWinner == 'tie') {
-      obj.winner = 'tie';
-      this.gameOver(obj);
-    }
+  if (gameOver != false) {
     //otherwise someone won
-    obj.winner = isWinner
+    obj.winner = winner
     this.gameOver(obj);
   }
-  return isWinner;
+  return gameOver;
 }
 module.exports = gamestate

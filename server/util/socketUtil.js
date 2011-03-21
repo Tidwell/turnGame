@@ -99,6 +99,10 @@ exports.connect = function(obj) {
 exports.message = function(obj) {
   //cache the event
   var type = obj.message.type;
+  if (type == undefined) {
+    //throw new Error('no type specified in command');
+    return false;
+  }
   //remove the message object and replace with an args object, if one exists
   if (obj.message.args) {
     obj.args = obj.message.args;
@@ -122,9 +126,35 @@ exports.disconnect = function(obj) {
   var client = obj.client;
   obj.games = games;
   obj.connectedUsers = connectedUsers;
-  //notify all the modules that a user Disconnected
+  //notify all of the games about the disconnect
+  gameUserDisconnect(obj);
+  //notify all the other modules that a user Disconnected
   moduleEventEmit.emit('userDisconnect', obj);
   //remove the player from the connectedUsers object
   delete connectedUsers[client.sessionId];
   return;
+}
+
+/*
+  *Called when a user disconnects
+  *
+  *@arg obj.
+  *         client         client object
+  *         socket         the socket object
+  *         connectedUsers object of connected users, indexed by session id
+  *         games          array of all games
+*/
+var gameUserDisconnect = function(obj) {
+  var game = obj.connectedUsers.findGameFromClientSessionId(obj);
+  if (game) {
+    log('game found, disconnecting users from');
+    log(game);
+    game.userDisconnect(obj);
+  }
+  else {
+    //we won't find a game when a user is not in a game and disconnects - if this is single-world, or users auto-join
+    //the game when authenticated, you should probably uncomment this as you always want to find the game on disconnect
+    
+    //throw new Error('Couldn\'t find game in userDisconnect handler in gameaction');
+  }
 }

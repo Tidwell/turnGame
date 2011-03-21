@@ -1,3 +1,4 @@
+var log = require('logging');
 /*
 Provides basic functionality for gamestate
 getPlayers
@@ -7,12 +8,19 @@ gameOver
 addPlayer
 listen (in case the gamestate doesn't listen for anything)
 
-*/
+*/ 
 function Gamestate() {
   this.eventEmitter;
-  this.maxPlayers;
+  this.minPlayers;
   this.started = false;
   
+  
+  // singleWorld or multipleWorld
+  this.type = 'multipleWorld';
+  //turnBased or realTime
+  this.timing = 'turnBased';
+  //if games can end (the games dont persist and/or have a "win" condition)
+  this.endable = true;
   
   //returns the players in the game 
   this.getPlayers = function() {
@@ -50,9 +58,14 @@ function Gamestate() {
   
   //sends a game over event to the players and sends out the event
   this.gameOver = function(obj) {
-    obj.players = this.players;
-    this.sendAllPlayers({type: 'gameOver', args: {winner: obj.winner}}, obj.socket);
-    this.eventEmitter.emit('gameEnd', obj);
+    if (this.endable) {
+      obj.players = this.players;
+      this.sendAllPlayers({type: 'gameOver', args: {winner: obj.winner}}, obj.socket);
+      this.eventEmitter.emit('gameEnd', obj);
+    }
+    else {
+      throw new Error('gameEnd command sent on a non-endable game type')
+    }
   }
   
    /*
@@ -64,10 +77,12 @@ function Gamestate() {
   *         connectedUsers connectedUsers obj, keyed by sessionId
   */
   this.addPlayer = function(obj) {
+    log('add player called');
+    log(this.players);
     //add the player to the game
     this.players.push({sessionId: obj.client.sessionId});
-    //if the game has 2 players in it
-    if (this.players.length == this.maxPlayers) {
+    //if the game has the min players, start it
+    if (this.players.length == this.minPlayers) {
       this.startGame(obj)
     }
   }
@@ -81,19 +96,24 @@ function Gamestate() {
   *         connectedUsers connectedUsers obj, keyed by sessionId
   */
   this.userDisconnect = function(obj) {
+    log('disconnecting from in gamestate');
     var game = this;
     var i = 0;
     var toDelete = null;
     this.players.forEach(function(player) {
       if (player.sessionId != obj.client.sessionId) {
+        log('telling player disco happened');
         game.sendPlayer({type: 'opponentDisconnect', args: {opponentDisconnect: obj.client.sessionId}}, player.sessionId, obj.socket);
       }
       if (player.sessionId == obj.client.sessionId) {
+        log('founddelete '+i);
         toDelete = i;
       }
       i++;
     });
+    log(this.players);
     this.players.remove(toDelete);
+    log(this.players);
     this.checkGameEnd(obj);
   }
   

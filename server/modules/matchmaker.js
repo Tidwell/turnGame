@@ -37,32 +37,49 @@ function matchmaker() {
   *         games          array of all games
   */
   this.gameEnd = function(obj) {
-    //if there was no winner, than we have an empty game due to disconnect, and we need to run a cleanup to remove em
-    if (obj.winner) {
+    log(obj.winner);
+    var toDelete;    
+    //make sure we have players we need to send to
+    if (obj.winner != 'allPlayerDisconnect' && obj.winner != false) {
       var i = 0;
-      var game = obj.connectedUsers.findGameFromClientSessionId(obj, obj.winner.sessionId);
-      if (!game) {
-        throw new Error('Could not find game in matchmaker.gameEnd');
+      var winPlayer;
+      if (obj.winner.length != undefined) {
+        winPlayer = obj.winner[0].sessionId
       }
-      game.players.forEach(function(player) {
-        if (obj.connectedUsers[player.sessionId]) {
-          obj.connectedUsers[player.sessionId].inGame = false;
-        }
-      });
-      obj.games.remove(game.gameIndex)
+      else {
+        winPlayer = obj.winner.sessionId
+      }
+      var game = obj.connectedUsers.findGameFromClientSessionId(obj, winPlayer);
+      //we check and see if a game actually ended
+      if (game) {
+        game.players.forEach(function(player) {
+          if (obj.connectedUsers[player.sessionId]) {
+            obj.connectedUsers[player.sessionId].inGame = false;
+          }
+        });
+        log('gameIndex to delete: '+game.gameIndex);
+        toDelete = game.gameIndex;
+      }
+      else {
+        throw new Error('no freaking game found, how is that possible?');
+      }
     }
-    else {
+    //if there was no winner, than we have an empty game due to disconnect, and we need to run a cleanup to remove em
+    else if (obj.winner = 'allPlayerDisconnect') {
       var i = 0;
-      var toDelete;
       obj.games.forEach(function(game) {
-        log(game);
         if (game.players.length == 0) {
           toDelete = i;    
         }
         i++;
       })
-      obj.games.remove(toDelete)
     }
+    if (toDelete != undefined) {
+      log('game delete request found '+toDelete);
+      obj.games.remove(toDelete);
+    }
+    log('all games');
+    log(obj.games);
   }
   
  /*
@@ -75,6 +92,9 @@ function matchmaker() {
   *         games          array of all games
   */
   this.joinGame = function(obj) {
+    log('allgames on joinGame');
+    log(obj.games);
+    
     //check they aren't in a game
     if (obj.connectedUsers[obj.client.sessionId].inGame == true) {
       obj.client.send({type: 'inGameError'});
@@ -88,20 +108,27 @@ function matchmaker() {
     var i = 0;
     //find the first empty game
     obj.games.forEach(function(game) {
-      if (game.getPlayers().length != game.maxPlayers) {
+      log(game);
+      if (game.getPlayers().length < game.minPlayers) {
         emptyGame = i;
-      }
+      } 
       i++;
     });
     if (emptyGame != null) {
       //if we found a game
+      log('found game');
       obj.games[emptyGame].addPlayer({socket: obj.socket, client: obj.client, connectedUsers: obj.connectedUsers});
       return true;
     }
-    //otherwise create a new gamestate
+    //otherwise create a new game
+    log('creating new game');
     var g = new gamestate(matchmaker.eventEmitter);
-    g.addPlayer({socket: obj.socket, client: obj.client, connectedUsers: obj.connectedUsers});
+    g.addPlayer(obj);
+    //add it to the global list of gamestates
     obj.games.push(g);
+    log(obj.games);
+    var index = obj.games.length-1;
+    log('new game created, index '+index);
   }
   
   
