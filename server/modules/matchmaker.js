@@ -8,7 +8,9 @@ require.paths.unshift('game/');
 //assignment/loading
 var 
       log = require('logging');
-      gamestate = require('gamestate');
+      var path = process.cwd()+'/game/gamestate';
+      log(path);
+      gamestate = require(path);
 
 //Module Declaration
 function matchmaker() {

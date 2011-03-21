@@ -5,18 +5,18 @@ Tracks connected users in memory
 
 
 //add our require paths to the require array
-require.paths.unshift('util/');
-require.paths.unshift('../shared/');
-require.paths.unshift('modules/');
+//require.paths.unshift('util/');
+//require.paths.unshift('../shared/');
+//require.paths.unshift('./modules/');
 
 //assignments/loading
 var 
     //module libraries
     log = require('logging')
     //cusom libraries
-    , messageEventEmitter = require('messageEventEmitter')    
+    , messageEventEmitter = require('./messageEventEmitter')    
     //cusom module objects
-    , modulesToLoad = require('_modulesToLoad')
+    , modulesToLoad = require('./../../shared/_modulesToLoad')
   
 //create the event emitter the modules use to handle
 //messages from the client
@@ -24,7 +24,7 @@ var moduleEventEmit = new messageEventEmitter;
 
 //attach the listeners for each of the modules
 modulesToLoad.forEach(function(moduleName) {
-  var modulePrototype = require(moduleName);
+  var modulePrototype = require('./../modules/'+moduleName);
   var module = new modulePrototype;
   module.listen(moduleEventEmit);
 })

@@ -3,12 +3,10 @@ Module for handling user authentication
 .setName = sets a users name attribute in the connectedUsers
 */
 
-//add our require paths to the require array
-require.paths.unshift('shared/');
 
 //assignment/loading
 var 
-      isValidName = require('isValidName'),
+      isValidName = require('./../../shared/isValidName'),
       log = require('logging');
 
 //create validName object

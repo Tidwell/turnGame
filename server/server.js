@@ -1,3 +1,4 @@
+function generalGameServer() {
 /*
 Creates the basic http and socket servers
 Uses util classes to handle those requests
@@ -8,7 +9,7 @@ socket requests are routed through util/socketUtil.js
 
 
 //add our require paths to the require array
-require.paths.unshift('util/');
+
 
 //assignments/loading
 var 
@@ -19,11 +20,14 @@ var
   , server
   //module libraries
   , io = require('socket.io')
-  , log = require('logging')
+  , log = require('logging');
+
+log(process.cwd());
+  
   
   //custom objects  
-  , httpUtil = require('httpUtil.js')
-  , socketUtil = require('socketUtil.js')
+  var httpUtil = require('./util/httpUtil.js')
+  , socketUtil = require('./util/socketUtil.js')
 
 //path to where all the front-end code lives (html/css/js)
 //relative to the root dir, without leading or trailing /
@@ -75,3 +79,6 @@ io.on('connection', function(client){
   });
 	
 });
+};
+
+module.exports = new generalGameServer;

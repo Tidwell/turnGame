@@ -1,0 +1,14 @@
+{
+  "name": "generalGameServer",
+  "description": "General Server for Creating real-time browser-based games",
+  "version": "0.0.0",
+  "repository": "git://github.com/Tidwell/turnGame.git",
+  "author": "Aaron Tidwell <Aaron.Tidwell@gmail.com>",
+  "main": "server/server",
+  "directories": {
+    "lib": "server"
+  },
+  "engines": {
+    "node": "*"
+  }
+}

@@ -32,7 +32,7 @@ function gamestate(eventEmitter) {
 }
 
 //set the inheratance to the system gamestate
-gamestate.prototype = require('Gamestate').Gamestate;
+gamestate.prototype = require('./../system/Gamestate').Gamestate;
 
 
 /*
