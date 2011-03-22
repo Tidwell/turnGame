@@ -29,6 +29,13 @@ generalGameServer.prototype.createServer = function(obj) {
   //path to where all the front-end code lives (html/css/js)
   var clientFolderPath = obj.server.clientDir ? obj.server.clientDir : 'client';
 
+  
+  //require the system and user gamestates - we have to call new inside of the gamestate in order to grab prototyped funcs
+  var systemGamestate = require('./system/Gamestate').Gamestate;
+  var userGamestate = require(process.cwd()+'/server/game/gamestate').gamestate;
+  userGamestate.prototype = systemGamestate;
+  
+    
   //todo accept serveHttp arg from passed in object and convert to use simple http (maybe with jqtpl)
   //create the http server
   var server = http.createServer(function(req, res){
@@ -61,23 +68,24 @@ generalGameServer.prototype.createServer = function(obj) {
   //when connected
   io.on('connection', function(client){
     //handle the user connecting
-    socketUtil.connect({client: client, socket: io});
+    socketUtil.connect({client: client, socket: io, gamestateTemplate: userGamestate});
      
     //setup the message event listener for when a message is recieved from the client
     client.on('message', function(message){
       //pass it to the handler
-      socketUtil.message({client: client, message: message, socket: io});
+      socketUtil.message({client: client, message: message, socket: io, gamestateTemplate: userGamestate});
     });
 
     //on disconnect
     client.on('disconnect', function(){
       //tell the handler that the user diconnected
-      socketUtil.disconnect({client: client, socket: io});
+      socketUtil.disconnect({client: client, socket: io, gamestateTemplate: userGamestate});
     });
   });
   
   return {
-    modules: socketUtil.mods
+    modules: socketUtil.mods,
+    gamestateTemplate: new userGamestate
   }
 
 }

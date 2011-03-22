@@ -14,6 +14,10 @@ function Gamestate() {
   this.minPlayers;
   this.started = false;
   
+  this.init = function(eventEmitter) {
+    this.eventEmitter = eventEmitter;
+  }
+  
   
   // singleWorld or multipleWorld
   this.type = 'multipleWorld';
@@ -84,7 +88,7 @@ function Gamestate() {
       this.startGame(obj)
     }
   }
-   
+    
   /*
   *Notified when a player in this game disconnects from the service
   *
@@ -125,5 +129,5 @@ function Gamestate() {
     return false;
   }
 }
-
+ 
 exports.Gamestate = new Gamestate;

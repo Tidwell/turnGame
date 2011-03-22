@@ -112,8 +112,10 @@ function matchmaker() {
       return true;
     }
     //otherwise create a new game
-    var g = new gamestate(matchmaker.eventEmitter);
+    var g = new obj.gamestateTemplate
+    g.init(matchmaker.eventEmitter);
     g.addPlayer(obj);
+
     //add it to the global list of gamestates
     obj.games.push(g);
     var index = obj.games.length-1;
