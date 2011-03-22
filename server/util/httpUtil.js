@@ -41,12 +41,9 @@ exports.getSystemPathFromRequest = function(obj){
       path = '/index.html';
     }
   }
-  //set the full path from the system root
-  //        util root/..up/..up/client folder/requested file path
-  var path = __dirname + '/../../' + clientFolderPath + path;
-
-  //replace shared includes with the shared directory
-  var path = path.replace('shared/', '../shared/');
+  //set the full path from the process execution root
+  var path = process.cwd() +'/'+clientFolderPath+path;
+  console.log(path);
   return path;
 }
 

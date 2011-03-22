@@ -8,7 +8,7 @@ require.paths.unshift('game/');
 //assignment/loading
 var 
       log = require('logging');
-      var path = process.cwd()+'/game/gamestate';
+      var path = process.cwd()+'/server/game/gamestate';
       log(path);
       gamestate = require(path);
 

@@ -16,7 +16,7 @@ var
     //cusom libraries
     , messageEventEmitter = require('./messageEventEmitter')    
     //cusom module objects
-    , modulesToLoad = require('./../../shared/_modulesToLoad')
+    , modulesToLoad = require(process.cwd()+'/client/shared/modulesToLoad')
   
 //create the event emitter the modules use to handle
 //messages from the client
