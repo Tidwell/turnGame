@@ -27,8 +27,9 @@ generalGameServer.prototype.createServer = function(obj) {
     , socketUtil = require('./util/socketUtil.js')
 
   //path to where all the front-end code lives (html/css/js)
-  var clientFolderPath = obj.clientDir ? obj.clientDir : 'client';
+  var clientFolderPath = obj.server.clientDir ? obj.server.clientDir : 'client';
 
+  //todo accept serveHttp arg from passed in object and convert to use simple http (maybe with jqtpl)
   //create the http server
   var server = http.createServer(function(req, res){
     //when we get a HTTP request
