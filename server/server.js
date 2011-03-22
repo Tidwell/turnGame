@@ -53,7 +53,7 @@ generalGameServer.prototype.createServer = function(obj) {
 
   //listen
   server.listen(8080);
-
+ 
   //set up socket server
   var io = io.listen(server);
 
@@ -73,11 +73,12 @@ generalGameServer.prototype.createServer = function(obj) {
       //tell the handler that the user diconnected
       socketUtil.disconnect({client: client, socket: io});
     });
-    
-    return {
-    
-    }
   });
+  
+  return {
+    modules: socketUtil.mods
+  }
+
 }
 
 module.exports = new generalGameServer;

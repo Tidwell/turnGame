@@ -9,7 +9,6 @@ require.paths.unshift('game/');
 var 
       log = require('logging');
       var path = process.cwd()+'/server/game/gamestate';
-      log(path);
       gamestate = require(path);
 
 //Module Declaration
@@ -39,7 +38,6 @@ function matchmaker() {
   *         games          array of all games
   */
   this.gameEnd = function(obj) {
-    log(obj.winner);
     var toDelete;    
     //make sure we have players we need to send to
     if (obj.winner != 'allPlayerDisconnect' && obj.winner != false) {
@@ -59,7 +57,6 @@ function matchmaker() {
             obj.connectedUsers[player.sessionId].inGame = false;
           }
         });
-        log('gameIndex to delete: '+game.gameIndex);
         toDelete = game.gameIndex;
       }
       else {
@@ -77,11 +74,8 @@ function matchmaker() {
       })
     }
     if (toDelete != undefined) {
-      log('game delete request found '+toDelete);
       obj.games.remove(toDelete);
     }
-    log('all games');
-    log(obj.games);
   }
   
  /*
@@ -94,9 +88,6 @@ function matchmaker() {
   *         games          array of all games
   */
   this.joinGame = function(obj) {
-    log('allgames on joinGame');
-    log(obj.games);
-    
     //check they aren't in a game
     if (obj.connectedUsers[obj.client.sessionId].inGame == true) {
       obj.client.send({type: 'inGameError'});
@@ -110,7 +101,6 @@ function matchmaker() {
     var i = 0;
     //find the first empty game
     obj.games.forEach(function(game) {
-      log(game);
       if (game.getPlayers().length < game.minPlayers) {
         emptyGame = i;
       } 
@@ -118,19 +108,15 @@ function matchmaker() {
     });
     if (emptyGame != null) {
       //if we found a game
-      log('found game');
       obj.games[emptyGame].addPlayer({socket: obj.socket, client: obj.client, connectedUsers: obj.connectedUsers});
       return true;
     }
     //otherwise create a new game
-    log('creating new game');
     var g = new gamestate(matchmaker.eventEmitter);
     g.addPlayer(obj);
     //add it to the global list of gamestates
     obj.games.push(g);
-    log(obj.games);
     var index = obj.games.length-1;
-    log('new game created, index '+index);
   }
   
   

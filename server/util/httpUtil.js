@@ -43,7 +43,6 @@ exports.getSystemPathFromRequest = function(obj){
   }
   //set the full path from the process execution root
   var path = process.cwd() +'/'+clientFolderPath+path;
-  console.log(path);
   return path;
 }
 

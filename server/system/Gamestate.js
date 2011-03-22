@@ -77,8 +77,6 @@ function Gamestate() {
   *         connectedUsers connectedUsers obj, keyed by sessionId
   */
   this.addPlayer = function(obj) {
-    log('add player called');
-    log(this.players);
     //add the player to the game
     this.players.push({sessionId: obj.client.sessionId});
     //if the game has the min players, start it
@@ -96,24 +94,21 @@ function Gamestate() {
   *         connectedUsers connectedUsers obj, keyed by sessionId
   */
   this.userDisconnect = function(obj) {
-    log('disconnecting from in gamestate');
     var game = this;
     var i = 0;
     var toDelete = null;
     this.players.forEach(function(player) {
       if (player.sessionId != obj.client.sessionId) {
-        log('telling player disco happened');
+        //telling player disco happened
         game.sendPlayer({type: 'opponentDisconnect', args: {opponentDisconnect: obj.client.sessionId}}, player.sessionId, obj.socket);
       }
       if (player.sessionId == obj.client.sessionId) {
-        log('founddelete '+i);
+        //found a player to delete
         toDelete = i;
       }
       i++;
     });
-    log(this.players);
     this.players.remove(toDelete);
-    log(this.players);
     this.checkGameEnd(obj);
   }
   

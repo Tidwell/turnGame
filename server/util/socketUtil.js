@@ -22,11 +22,13 @@ var
 //messages from the client
 var moduleEventEmit = new messageEventEmitter;
 
-//attach the listeners for each of the modules
+exports.mods = {}
+//attach the listeners for each of the modules 
 modulesToLoad.forEach(function(moduleName) {
   var modulePrototype = require('./../modules/'+moduleName);
   var module = new modulePrototype;
   module.listen(moduleEventEmit);
+  exports.mods[moduleName] = module;
 })
 
 //Object to store the users that are currently connected, indexed by sessionId
@@ -147,8 +149,6 @@ exports.disconnect = function(obj) {
 var gameUserDisconnect = function(obj) {
   var game = obj.connectedUsers.findGameFromClientSessionId(obj);
   if (game) {
-    log('game found, disconnecting users from');
-    log(game);
     game.userDisconnect(obj);
   }
   else {
