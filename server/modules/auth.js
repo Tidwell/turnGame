@@ -4,10 +4,10 @@ Module for handling user authentication
 */
 
 
-//assignment/loading
+//assignment/loading //todo use passed in client path
 var 
-      isValidName = require('./../../shared/isValidName'),
-      log = require('logging');
+      isValidName = require(process.cwd()+'/client/shared/isValidName'),
+      log = require('logging'); 
 
 //create validName object
 var isValidName = new isValidName;
