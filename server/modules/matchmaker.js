@@ -2,9 +2,6 @@
 Module for handling matchmaking
 */
 
-//add our require paths to the require array
-require.paths.unshift('game/');
-
 //assignment/loading
 var 
       log = require('logging');
@@ -12,8 +9,6 @@ var
 //Module Declaration
 function matchmaker(obj) {
   var matchmaker = this;
-  log(obj.gameSettings);
-  
   
   obj.client.on('joinGame', function(obj) {
     matchmaker.joinGame(obj)
@@ -36,9 +31,8 @@ function matchmaker(obj) {
   *         games          array of all games
   */
   this.gameEnd = function(obj) {
-    var toDelete;    
     //make sure we have players we need to send to
-    if (obj.winner != 'allPlayerDisconnect' && obj.winner != false) {
+    if (typeof obj.winner == 'object') {
       var i = 0;
       var winPlayer;
       if (obj.winner.length != undefined) {
@@ -53,27 +47,16 @@ function matchmaker(obj) {
         game.players.forEach(function(player) {
           if (obj.connectedUsers[player.sessionId]) {
             obj.connectedUsers[player.sessionId].inGame = false;
-          }
+          } 
         });
-        toDelete = game.gameIndex;
       }
       else {
         throw new Error('No game found after gameEnd event fired, how is that possible?');
       }
     }
-    //if there was no winner, than we have an empty game due to disconnect, and we need to run a cleanup to remove em
-    else if (obj.winner == 'allPlayerDisconnect') {
-      var i = 0;
-      obj.games.forEach(function(game) {
-        if (game.players.length == 0) {
-          toDelete = i;    
-        }
-        i++;
-      })
-    }
-    if (toDelete != undefined) {
-      obj.games.remove(toDelete);
-    }
+    //delete the game that has ended
+    var toDelete = game.gameIndex;
+    obj.games.remove(toDelete);
   }
   
  /*

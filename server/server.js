@@ -44,11 +44,9 @@ generalGameServer.prototype.createServer = function(obj) {
     gamestateTemplate: userGamestate,
     gameSettings: obj.game,
   }
-  
   //init the helper modules
   socketUtil.init(helperObj)
   moduleLoader.init(helperObj)
-  
   //Use node-static to create a static http server
   //see: https://github.com/cloudhead/node-static
   if (obj.server.serveHttp) {
@@ -67,6 +65,9 @@ generalGameServer.prototype.createServer = function(obj) {
   //if they want to use something like express or whatever, we need the server info so
   //that socket.io can hijack the folders it needs to serve the client socket-io scripts
   else {
+    if (!obj.server.server) {
+      throw new Error('You must pass in an instance of createServer as server.server if you set serveHttp to false');
+    }
     server = obj.server.server;
   }
 

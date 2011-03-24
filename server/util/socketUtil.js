@@ -105,6 +105,7 @@ exports.message = function(obj) {
   var game = obj.connectedUsers.findGameFromClientSessionId(obj);
    //emit the event
   obj.game = (game) ? game : false
+  obj.clientPath = obj.clientFolderPath
   moduleEventEmit.emit(type, obj);
   return;
 }

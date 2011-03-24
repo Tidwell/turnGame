@@ -16,7 +16,7 @@ function moduleLoader() {
       //Note we are defining the object that needs to be passed into the
       //module instantiation
       var module = new modulePrototype({
-        clientPath: process.cwd()+obj.clientFolderPath,
+        clientPath: process.cwd()+'/'+obj.clientFolderPath,
         client: obj.moduleEventEmitter,
         gamestateTemplate: obj.gamestateTemplate,
         gameSettings: obj.gameSettings    
