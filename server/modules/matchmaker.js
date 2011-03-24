@@ -8,13 +8,13 @@ require.paths.unshift('game/');
 //assignment/loading
 var 
       log = require('logging');
-      var path = process.cwd()+'/server/game/gamestate';
-      gamestate = require(path);
 
 //Module Declaration
 function matchmaker(obj) {
   var matchmaker = this;
-
+  log(obj.gameSettings);
+  
+  
   obj.client.on('joinGame', function(obj) {
     matchmaker.joinGame(obj)
   });
@@ -47,7 +47,7 @@ function matchmaker(obj) {
       else {
         winPlayer = obj.winner.sessionId
       }
-      var game = obj.connectedUsers.findGameFromClientSessionId(obj, winPlayer);
+      var game = obj.game;
       //we check and see if a game actually ended
       if (game) {
         game.players.forEach(function(player) {
@@ -58,11 +58,11 @@ function matchmaker(obj) {
         toDelete = game.gameIndex;
       }
       else {
-        throw new Error('no freaking game found, how is that possible?');
+        throw new Error('No game found after gameEnd event fired, how is that possible?');
       }
     }
     //if there was no winner, than we have an empty game due to disconnect, and we need to run a cleanup to remove em
-    else if (obj.winner = 'allPlayerDisconnect') {
+    else if (obj.winner == 'allPlayerDisconnect') {
       var i = 0;
       obj.games.forEach(function(game) {
         if (game.players.length == 0) {

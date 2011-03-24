@@ -41,7 +41,8 @@ generalGameServer.prototype.createServer = function(obj) {
   var helperObj = {
     clientFolderPath: clientFolderPath,
     moduleEventEmitter: moduleEventEmit,
-    gamestateTemplate: userGamestate
+    gamestateTemplate: userGamestate,
+    gameSettings: obj.game,
   }
   
   //init the helper modules

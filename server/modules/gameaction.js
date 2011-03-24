@@ -21,17 +21,13 @@ function gameaction(obj) {
   *         games          array of all games
   */
   this.placeLetter = function(obj) {
-    var game = obj.connectedUsers.findGameFromClientSessionId(obj);
-    if (game) {
-      game.placeLetter(obj);
+    if (obj.game) {
+      obj.game.placeLetter(obj);
     }
     else {
       throw new Error('placeLetter called without game');
     }
   }
 }
-
-
-
 
 module.exports = gameaction
