@@ -15,22 +15,27 @@ var
     log = require('logging')
     //cusom libraries
     , messageEventEmitter = require('./messageEventEmitter')    
-    //cusom module objects
-    , modulesToLoad = require(process.cwd()+'/client/shared/modulesToLoad')
   
 //create the event emitter the modules use to handle
 //messages from the client
 var moduleEventEmit = new messageEventEmitter;
+var clientFolderPath;
 
 exports.mods = {}
-//attach the listeners for each of the modules 
-modulesToLoad.forEach(function(moduleName) {
-  var modulePrototype = require('./../modules/'+moduleName);
-  var module = new modulePrototype;
-  module.listen(moduleEventEmit);
-  exports.mods[moduleName] = module;
-})
 
+exports.load = function() {
+  var modulesToLoad = require(process.cwd()+'/'+clientFolderPath+'/shared/modulesToLoad');
+  //attach the listeners for each of the modules 
+  modulesToLoad.forEach(function(moduleName) {
+    var modulePrototype = require('./../modules/'+moduleName);
+    var module = new modulePrototype({
+      clientPath: process.cwd()+'/'+clientFolderPath
+    });
+    module.listen(moduleEventEmit);
+    exports.mods[moduleName] = module;
+  })
+}
+  
 //Object to store the users that are currently connected, indexed by sessionId
 var connectedUsers = {};
 
@@ -72,6 +77,10 @@ connectedUsers.findGameFromClientSessionId = function(obj, idOverride) {
     return obj.games[targetGame];
   }
   return false;
+}
+
+exports.setClientPath = function(path) {
+  clientFolderPath = path
 }
 
 

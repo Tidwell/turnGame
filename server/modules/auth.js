@@ -5,14 +5,12 @@ Module for handling user authentication
 
 
 //assignment/loading //todo use passed in client path
-var 
-      isValidName = require(process.cwd()+'/client/shared/isValidName'),
-      log = require('logging'); 
+var log = require('logging'); 
 
-//create validName object
-var isValidName = new isValidName;
 //Module Declaration
-function auth() {
+function auth(obj) {
+  //create validName object
+  var isValidName = new require(obj.clientPath+'/shared/isValidName')
   /* REQUIRED ON EVERY MODULE
   *Called when the module is loaded, sets up event listeners
   *@arg eventEmitter    the event emitter object to attach events to

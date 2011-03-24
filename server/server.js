@@ -28,7 +28,9 @@ generalGameServer.prototype.createServer = function(obj) {
 
   //path to where all the front-end code lives (html/css/js)
   var clientFolderPath = obj.server.clientDir ? obj.server.clientDir : 'client';
-
+  
+  socketUtil.setClientPath(clientFolderPath);
+  socketUtil.load();
   
   //require the system and user gamestates - we have to call new inside of the gamestate in order to grab prototyped funcs
   var systemGamestate = require('./system/Gamestate').Gamestate;
