@@ -22,7 +22,7 @@ function matchmaker(obj) {
     matchmaker.gameEnd(obj)
   });
   
-  this.eventEmitter = obj.client;
+  this.client = obj.client;
   
   
   /*
@@ -111,7 +111,7 @@ function matchmaker(obj) {
     }
     //otherwise create a new game
     var g = new obj.gamestateTemplate
-    g.init(matchmaker.eventEmitter);
+    g.init(matchmaker.client);
     g.addPlayer(obj);
 
     //add it to the global list of gamestates

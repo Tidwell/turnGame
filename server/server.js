@@ -1,75 +1,74 @@
+//assignments/loading
+var 
+    //node.js libraries
+    fs = require('fs')
+  , sys = require('sys')
+  //module libraries
+  , log = require('logging')
+  //other vars
+  , server
+  
+//custom objects  
+var socketUtil = require('./util/socketUtil.js')
+var moduleLoader = require('./util/moduleLoader.js');
+var messageEventEmitter = require('./util/moduleEventEmitter')
+
 function generalGameServer(obj) {
   
 };
 
+/*
+Creates the basic http and socket servers
+Uses socketUtil to create/handle incomming socket messages
+Uses modulLoader to load up all the defined modules
+Uses moduleEventEmitter to create a global eventlistener (exposed to modules as .client)
+*/
 generalGameServer.prototype.createServer = function(obj) {
-  /*
-  Creates the basic http and socket servers
-  Uses util classes to handle those requests
-
-  http requests are routed through util/httpUtil.js
-  socket requests are routed through util/socketUtil.js
-  */
-
-  //assignments/loading
-  var 
-      //node.js libraries
-      fs = require('fs')
-    , sys = require('sys')
-    , server
-    //module libraries
-    , io = require('socket.io')
-    , log = require('logging');
-
-  //custom objects  
-  var socketUtil = require('./util/socketUtil.js')
+  var io = require('socket.io')
 
   //path to where all the front-end code lives (html/css/js)
   var clientFolderPath = obj.server.clientDir ? obj.server.clientDir : 'client';
   
-  socketUtil.setClientPath(clientFolderPath);
-  socketUtil.load();
-  
-  //require the system and user gamestates - we have to call new inside of the gamestate in order to grab prototyped funcs
+  //require the system and user gamestates
   var systemGamestate = require('./system/Gamestate').Gamestate;
   var userGamestate = require(process.cwd()+'/server/game/gamestate').gamestate;
   userGamestate.prototype = systemGamestate;
   
-    
-  //todo accept serveHttp arg from passed in object and convert to use simple http (maybe with jqtpl)
+  //instantiate a new global event emitter that will be passed around to all the modules like a whore.
+  var moduleEventEmit = new messageEventEmitter;
   
+  //define the object that will be passed into the helper modules
+  var helperObj = {
+    clientFolderPath: clientFolderPath,
+    moduleEventEmitter: moduleEventEmit,
+    gamestateTemplate: userGamestate
+  }
+  
+  //init the helper modules
+  socketUtil.init(helperObj)
+  moduleLoader.init(helperObj)
+  
+  //Use node-static to create a static http server
+  //see: https://github.com/cloudhead/node-static
   if (obj.server.serveHttp) {
+    var static = require('node-static');
+    var file = new(static.Server)(helperObj.clientFolderPath);
     var http = require('http');
-    var httpUtil = require('./util/httpUtil.js');
-    //create the http server
-    var server = http.createServer(function(req, res){
-      //when we get a HTTP request
-      //get the requested system path
-      var systemPath = httpUtil.getSystemPathFromRequest({
-        clientFolderPath: clientFolderPath, 
-        req: req
+    
+    server = http.createServer(function (request, response) {
+      request.addListener('end', function () {
+        file.serve(request, response);
       });
-      //try to grab the file
-      fs.readFile(systemPath, function(err, data){
-        //if the file cannot be found
-        if (err) {
-          //send the client a 404 response
-          httpUtil.send404(res);
-          return;
-        }
-        //else, we can send back the file that maps to the requested url    
-        httpUtil.sendFile({res: res, data: data, path: systemPath});
-        return;
-      });
-    });
-
-    //listen
+    })
     server.listen(8080);
   }
-  else {
-    var server = obj.server.server;
-  }
   
+  //if they want to use something like express or whatever, we need the server info so
+  //that socket.io can hijack the folders it needs to serve the client socket-io scripts
+  else {
+    server = obj.server.server;
+  }
+
   //set up socket server
   var io = io.listen(server);
 
@@ -92,8 +91,10 @@ generalGameServer.prototype.createServer = function(obj) {
   });
   
   return {
-    modules: socketUtil.mods,
-    gamestateTemplate: new userGamestate
+    modules: moduleLoader.modules,
+    gamestateTemplate: new userGamestate,
+    httpServer: server,
+    socket: io
   }
 
 }

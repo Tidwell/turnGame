@@ -7,28 +7,12 @@ Tracks connected users in memory
 var 
     //module libraries
     log = require('logging')
-    //cusom libraries
-    , messageEventEmitter = require('./messageEventEmitter')    
+  
   
 //create the event emitter the modules use to handle
 //messages from the client
-var moduleEventEmit = new messageEventEmitter;
-var clientFolderPath;
+var moduleEventEmit;
 
-exports.mods = {}
-
-exports.load = function() {
-  var modulesToLoad = require(process.cwd()+'/'+clientFolderPath+'/shared/modulesToLoad');
-  //attach the listeners for each of the modules 
-  modulesToLoad.forEach(function(moduleName) {
-    var modulePrototype = require('./../modules/'+moduleName);
-    var module = new modulePrototype({
-      clientPath: process.cwd()+'/'+clientFolderPath,
-      client: moduleEventEmit
-    });
-    exports.mods[moduleName] = module;
-  })
-}
   
 //Object to store the users that are currently connected, indexed by sessionId
 var connectedUsers = {};
@@ -73,8 +57,9 @@ connectedUsers.findGameFromClientSessionId = function(obj, idOverride) {
   return false;
 }
 
-exports.setClientPath = function(path) {
-  clientFolderPath = path
+
+exports.init = function(obj) {
+  moduleEventEmit = obj.moduleEventEmitter;
 }
 
 

@@ -1,11 +1,6 @@
 /*
 Module for a gamestate commands
 */
-
- 
-var 
-      log = require('logging');
-
 function gameaction(obj) {
   var gameaction = this;
   
@@ -13,7 +8,7 @@ function gameaction(obj) {
     gameaction.placeLetter(obj)
   });
   
-/*
+ /*
   *Called when a user sends a placeLetter command
   *
   *@arg obj.
