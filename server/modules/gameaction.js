@@ -6,16 +6,12 @@ Module for a gamestate commands
 var 
       log = require('logging');
 
-function gameaction() {
-  /* REQUIRED ON EVERY MODULE
-  *Called when the module is loaded, sets up event listeners
-  *@arg eventEmitter    the event emitter object to attach events to
-  */
-  this.listen = function(eventEmitter) {
-    eventEmitter.on('placeLetter', this.placeLetter);
-  }
+function gameaction(obj) {
+  var gameaction = this;
   
-  
+  obj.client.on('placeLetter', function(obj) {
+    gameaction.placeLetter(obj)
+  });
   
 /*
   *Called when a user sends a placeLetter command

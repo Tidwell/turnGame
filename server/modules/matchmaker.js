@@ -12,19 +12,17 @@ var
       gamestate = require(path);
 
 //Module Declaration
-function matchmaker() {
-  /* REQUIRED ON EVERY MODULE
-  *Called when the module is loaded, sets up event listeners
-  *@arg eventEmitter    the event emitter object to attach events to
-  */
-  this.eventEmitter = {};
+function matchmaker(obj) {
   var matchmaker = this;
+
+  obj.client.on('joinGame', function(obj) {
+    matchmaker.joinGame(obj)
+  });
+  obj.client.on('gameEnd', function(obj) {
+    matchmaker.gameEnd(obj)
+  });
   
-  this.listen = function(eventEmitter) {
-    eventEmitter.on('joinGame', this.joinGame);
-    eventEmitter.on('gameEnd', this.gameEnd);
-    this.eventEmitter = eventEmitter;
-  }
+  this.eventEmitter = obj.client;
   
   
   /*

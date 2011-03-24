@@ -9,17 +9,13 @@ var log = require('logging');
 
 //Module Declaration
 function auth(obj) {
+  var auth = this;
   //create validName object
-  var isValidName = new require(obj.clientPath+'/shared/isValidName')
-  /* REQUIRED ON EVERY MODULE
-  *Called when the module is loaded, sets up event listeners
-  *@arg eventEmitter    the event emitter object to attach events to
-  */
-  this.listen = function(eventEmitter) {
-    //declare the event listeners, first arg is the name of the 
-    //event the client will send, second is the method to handle that event
-    eventEmitter.on('setName', this.setName);
-  }
+  var isValidName = require(obj.clientPath+'/shared/isValidName')
+  var isValidName = new isValidName;
+  obj.client.on('setName', function(obj) {
+    auth.setName(obj)
+  });
   
   /*
   *Called when a user sends a setName command

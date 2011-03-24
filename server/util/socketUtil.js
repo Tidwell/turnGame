@@ -3,12 +3,6 @@ Handles socket connections/disconnections/messages
 Tracks connected users in memory
 */
 
-
-//add our require paths to the require array
-//require.paths.unshift('util/');
-//require.paths.unshift('../shared/');
-//require.paths.unshift('./modules/');
-
 //assignments/loading
 var 
     //module libraries
@@ -29,9 +23,9 @@ exports.load = function() {
   modulesToLoad.forEach(function(moduleName) {
     var modulePrototype = require('./../modules/'+moduleName);
     var module = new modulePrototype({
-      clientPath: process.cwd()+'/'+clientFolderPath
+      clientPath: process.cwd()+'/'+clientFolderPath,
+      client: moduleEventEmit
     });
-    module.listen(moduleEventEmit);
     exports.mods[moduleName] = module;
   })
 }
