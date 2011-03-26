@@ -11,7 +11,9 @@ function moduleLoader() {
         throw new Error('Multiple modules named: '+moduleName+' please rename one of them')
       }
       //todo pass in serverFolderPath
-      var modulePrototype = require('./../modules/'+moduleName);
+      var serverFolderPath = process.cwd()+'/'+obj.clientFolderPath+'/../server/modules/';
+      var modulePrototype = require(serverFolderPath+moduleName);
+      //var modulePrototype = require('./../modules/'+moduleName);
       
       //Note we are defining the object that needs to be passed into the
       //module instantiation
