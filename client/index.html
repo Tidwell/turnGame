@@ -1,91 +1,98 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Tic-Tac-Toe M-M-O</title>
-		<link rel="stylesheet" type="text/css" href="/css/reset.css" />
-		<link rel="stylesheet" type="text/css" href="/css/common.css" />
-		<!--jquery-->
+  <head>
+    <title>TurnFortress2</title>
+    <link rel="stylesheet" type="text/css" href="/css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/tf2.css" />
+    <!--jquery-->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-    <!--socket connection-->
-		<script src="/js/json.js"></script> <!-- for ie -->
-		<script src="/socket.io/socket.io.js"></script>
-    <!-- module loading-->
-    <script src="/shared/_modulesToLoad.js"></script>
-    <script src="/js/util/moduleLoaderUtil.js"></script>
-    <!--shared classes-->
-    <script src="/shared/example.js"></script>
-    <script src="/shared/isValidName.js"></script>
+    <script src="/lib/jquery.transform.js"></script>
+    <script src="/lib/jquery.json.js"></script>
 
-    <script type="text/javascript">
-			$(function() { //on DOM ready 
-        //create the socket connection and connect
-        var socket = new io.Socket(null, {port: 8080, rememberTransport: false});
-        socket.connect();
-        
-        //create the module loader object and pass it the socket
-        var moduleLoader = new moduleLoaderUtil(socket);
-        
-        //load the modules, passing a callback for when all modules are loaded
-        moduleLoader.load(function() {
-          $('#loading').fadeOut(function() {
-            $('#auth').fadeIn();
-            $('#matchmaker').fadeIn();
-          });
-        });
-        
-        //example of a shared calss
-        var shared = new ExampleSharedClass;
-        //console.log(shared);
-        //console.log(shared.publicMethod());
-        //console.log(shared.publicAttribute);
-      });
-		</script>
-	</head>
-	<body>
-    <!--HTML for the auth Module-->
-    <div id="auth" class="module">
-      <h2>Auth Module</h2>
-      <form id="setName">Name: <input type="text" /><input type="submit"value="Set" /></form>
-      <p class="error" style="display: none"></p>
-      <p class="success" style="display: none"></p>
-      <a class="showlink">show Auth Modules</a>
+    <script src="/js/base.js"></script>
+    <script src="/js/models/game.js"></script>
+    <script src="/js/models/renderer.js"></script>
+    <script src="/js/models/editor.js"></script>
+
+    <script>
+    $(function() {
+      var g = new game();
+      var r = new renderer();
+      var e = new editor();
+    });
+
+    //generates a flat board of x by y
+    function generate(x,y,tile) {
+      tile = tile || 'grass'
+      var obj = {
+        hexes: []
+      };
+      var xVal = 0;
+      while (xVal < x) {
+        var yVal = 0;
+        while (yVal < y) {
+          obj.hexes.push({
+            "x": xVal,
+            "y": yVal,
+            "z": 3,
+            "tileType": tile
+          })
+          yVal++;
+        }
+        xVal++;
+      }
+      return JSON.stringify(obj);
+    }
+
+    </script>
+  </head>
+  <body>
+
+    <div id="gamestate">
+
+      <div id="map">
+          <div id="hexContainer">
+
+          </div>
+          <div id="mask">
+
+          </div>
+      </div>
+
+      <div id="map_editor">
+        <p class="selected">Selected Tile: <span></span></p>
+        <p>Type:
+          <select class="typeType">
+            <option value="_default">Default</option>
+            <option value="startBlue">Blue Spawn</option>
+            <option value="startRed">Red Spawn</option>
+            <option value="cappoint">Capture Point</option>
+            <option value="concrete">Concrete</option>
+            <option value="concreteCracks">Concrete - Cracks</option>
+            <option value="concreteRubble">Concrete - Rubble</option>
+            <option value="grass">Grass</option>
+            <option value="sand">Sand</option>
+            <option value="sandbrack">Sand/Brack</option>
+            <option value="tiles">Tiles</option>
+            <option value="waste">Toxic Waste</option>
+            <option value="water">Water</option>
+            <option value="whiteWood">Wood - White</option>
+            <option value="whiteWoodPlanks">Wood - White Planks</option>
+            <option value="woodPlatform">Wood - White Platform</option>
+          </select>
+          <input type="checkbox" checked="checked">Hide Characters
+        </p>
+        <button class="up">Up</button>
+        <button class="down">Down</button>
+        <button class="remove">Remove</button>
+        <button class="reset">Reset</button>
+        <button class="load">Load</button><br />
+        <textarea style="width: 300px"></textarea>
+      </div>
+
     </div>
-    <!--HTML for the matchmaker Module-->
-    <div id="matchmaker" class="module">
-      <h2>Matchmaker Module</h2>
-      <h3 class="win">You Won!</h3>
-      <h3 class="lost">You Lost</h3>
-      <button>Play a Game</button>
-      <img class="loading" src="images/loading.gif" alt="Loading..." style="display: none" />
-      <p class="error" style="display: none"></p>
-    </div>
-    <!--HTML for the matchmaker Module-->
-    <div id="gamestate" class="module">
-      <h2>Gamestate Module</h2>
-      <ul class="players"></ul>
-      <table>
-        <tr>
-          <td rel="x0y0"></td>
-          <td rel="x1y0"></td>
-          <td rel="x2y0"></td>
-        </tr>
-        <tr>
-          <td rel="x0y1"></td>
-          <td rel="x1y1"></td>
-          <td rel="x2y1"></td>
-        </tr>
-        <tr>
-          <td rel="x0y2"></td>
-          <td rel="x1y2"></td>
-          <td rel="x2y2"></td>
-        </tr>
-      </table>
-      <p class="error" style="display: none"></p>
-    </div>
-    
-    <!--Shown while modules are loading-->
-    <div id="loading" class="module" style="display: block;">
-      <img class="loading" src="images/loading.gif" alt="Loading..." />
-    </div>
+
+
   </body>
 </html>
