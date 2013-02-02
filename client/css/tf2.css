@@ -22,7 +22,7 @@ body {
   width: 48px;
   height: 55px;
   float: left;
-  
+
 }
 
 
@@ -69,8 +69,8 @@ body {
 }
 
 #map .hex {
-  width: 114px; 
-  height: 157px; 
+  width: 114px;
+  height: 157px;
   position: absolute;
   top: 0px;
   left: 10px;
@@ -137,6 +137,7 @@ body {
 }
 #map .char {
    -moz-transform: scale(0.375);
+   -webkit-transform: scale(0.375);
     left: 0;
     position: absolute;
     top: -155px;
@@ -166,7 +167,7 @@ body {
 }
 #map .char.demo .img {
  background: url("/images/redtrans2.png") no-repeat scroll -1200px 10px transparent;
-}  
+}
 #map .char.pyro .img {
  background: url("/images/redtrans2.png") no-repeat scroll -1400px 10px transparent;
 }
